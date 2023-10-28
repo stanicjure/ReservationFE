@@ -107,6 +107,22 @@
   position: absolute;
   left: 52%;
 }
+.dateErrorMsg {
+  border: solid 1px rgb(202, 0, 0);
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  background-color: rgba(255, 95, 95, 0.66);
+  color: rgb(141, 0, 0);
+  font-weight: 600;
+  position: absolute;
+  left: 0px;
+  transform: translate(-100%, 0);
+  height: 2.4rem;
+  display: flex;
+  align-items: center;
+}
 .checkButton {
   background-color: transparent;
   border: none;
@@ -120,20 +136,6 @@
   color: rgb(0, 160, 8);
   position: absolute;
   left: 52%;
-}
-.unCheckButton {
-  background-color: transparent;
-  border: none;
-  margin: 0;
-  padding: 0;
-  text-align: inherit;
-  font: inherit;
-  border-radius: 0;
-  appearance: none;
-  cursor: pointer;
-  color: rgb(199, 0, 0);
-  position: absolute;
-  left: 48%;
 }
 .reservationInfoInput {
   height: 1.8rem;
@@ -184,5 +186,8 @@
   right: 10px;
 }
 #confirmButton {
+  background-color: rgb(0, 88, 0);
+}
+#confirmButton:hover {
   background-color: green;
 }

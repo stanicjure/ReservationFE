@@ -12,6 +12,8 @@ import formatDate from "../api/formatDate";
 import deFormatDate from "../api/deFormatDate";
 
 const ReservationInfo = (props) => {
+  const [dateStartError, setDateStartError] = useState(false); // for start and end date inputs
+  const [dateEndError, setDateEndError] = useState(false); // for start and end date inputs
   const axiosPrivate = useAxiosPrivate();
 
   const [isInputDisabled, setIsInputDisabled] = useState([
@@ -24,8 +26,12 @@ const ReservationInfo = (props) => {
     true,
   ]);
 
-  const { setIsReservationInfoVisible, reservationInfo, setReservationinfo } =
-    props;
+  const {
+    setIsReservationInfoVisible,
+    reservationInfo,
+    setReservationInfo,
+    apartments,
+  } = props;
 
   // only used to get username for axios
   const { auth } = useAuth();
@@ -40,9 +46,13 @@ const ReservationInfo = (props) => {
       "placeholder",
       "placeholder",
     ]);
-  const [additionalInfo, setAdditionalInfo] = useState(); // textarea
+  const [additionalInfo, setAdditionalInfo] = useState("placeholder"); // textarea
 
   const res = reservationInfo.reservation; //clicked reservation
+
+  //style for changed input fields
+  const [changed, setChanged] = useState([]);
+  const [textareaChanged, setTextAreaChanged] = useState();
 
   const createArrayForDisplay = () => {
     if (!res) return;
@@ -67,7 +77,7 @@ const ReservationInfo = (props) => {
     startDate.setHours(2);
     endDate.setHours(2);
     try {
-      await axiosPrivate.patch("/users/reservation", {
+      const response = await axiosPrivate.patch("/users/reservation", {
         username: "Jure",
         guestName: reservationInfoArrayToDisplay[1],
         apartmentName: reservationInfoArrayToDisplay[0],
@@ -79,6 +89,24 @@ const ReservationInfo = (props) => {
         additionalInfo: additionalInfo,
         reservationIndex: reservationInfo.index,
       });
+      // changed inputs background to green
+      if (response.status === 200) {
+        if (textareaChanged.background === "rgba(255,175,0,0.12)")
+          setTextAreaChanged({ background: "rgba(0,255,0,0.3)" });
+        let temp = changed.map((c) => c);
+        changed.forEach((c, index) => {
+          if (c.background === "rgba(255,175,0,0.27)")
+            temp[index] = { background: "rgba(0,255,0,0.3)" };
+        });
+        setChanged(temp);
+        setReservationInfo({
+          label: undefined,
+          index: undefined,
+          reservation: undefined,
+        });
+        // doesnt matter what we set, we just want a change to happen so useEffect in ApartmentInfo.js gets new data from database.
+        // could be optimized so it gets just changed data, not all
+      }
     } catch (err) {
       console.error(err);
     }
@@ -109,11 +137,8 @@ const ReservationInfo = (props) => {
   const handleCheckMark = () => {};
 
   const exitReservationInfo = () => {
-    setIsReservationInfoVisible(false);
+    setIsReservationInfoVisible(false); //lol
   };
-
-  //style for changed input fields
-  const [changed, setChanged] = useState([]);
 
   useEffect(() => {
     createArrayForDisplay();
@@ -134,7 +159,6 @@ const ReservationInfo = (props) => {
 
   // Detect changed input fields
   useEffect(() => {
-    //format date, maybe use a hook or smthing we already use same
     const { startFormated, endFormated } = formatDate(res.start, res.end);
 
     const startingValues = [
@@ -145,7 +169,15 @@ const ReservationInfo = (props) => {
       res.persons,
       res.children,
     ];
+    const startingAdditionalInfo = res.additionalInfo;
 
+    if (
+      startingAdditionalInfo != additionalInfo &&
+      additionalInfo != "placeholder"
+    )
+      setTextAreaChanged({ background: "rgba(255,175,0,0.12)" });
+    else setTextAreaChanged({ background: "rgb(235, 235, 235)" });
+    console.log(textareaChanged);
     let temp = changed.map((c) => c);
 
     startingValues.forEach((val, index) => {
@@ -153,7 +185,7 @@ const ReservationInfo = (props) => {
         val != reservationInfoArrayToDisplay[index + 1] &&
         reservationInfoArrayToDisplay[index + 1] != "placeholder"
       ) {
-        temp[index] = { background: "rgba(255,0,0,0.3)" };
+        temp[index] = { background: "rgba(255,175,0,0.27)" };
       } else if (
         val == reservationInfoArrayToDisplay[index + 1] &&
         reservationInfoArrayToDisplay[index + 1] != "placeholder"
@@ -161,11 +193,47 @@ const ReservationInfo = (props) => {
         if (index % 2 === 0) temp[index] = { background: "rgb(240,240,240)" };
         else temp[index] = { background: "rgb(220,220,220)" };
       }
-      console.log(changed);
       setChanged(temp);
+
+      // Check validity of dates, if there is an existing reservation
+      let apartment;
+      setDateStartError(false);
+      setDateEndError(false);
+      apartments.forEach((ap) => {
+        if (ap.label === reservationInfo.label) apartment = ap;
+      });
+
+      const checkStart = deFormatDate(reservationInfoArrayToDisplay[2]);
+      checkStart.setHours(2);
+      const checkEnd = deFormatDate(reservationInfoArrayToDisplay[3]);
+      checkEnd.setHours(2);
+      const allReservations = Array.from(apartment.reservations);
+      const filteredReservations = allReservations.filter(
+        (r, index) => index !== reservationInfo.index
+      );
+
+      if (checkStart.getTime() > checkEnd.getTime()) {
+        setDateStartError(true);
+        setDateEndError(true);
+      }
+      filteredReservations.forEach((r, index) => {
+        console.log(r);
+        const start = new Date(r.start);
+        const end = new Date(r.end);
+        if (
+          checkStart.getTime() >= start.getTime() &&
+          checkStart.getTime() < end.getTime()
+        )
+          setDateStartError(true);
+        if (
+          checkEnd.getTime() > start.getTime() &&
+          checkEnd.getTime() <= end.getTime()
+        )
+          setDateEndError(true);
+      });
     });
     return () => {};
-  }, [reservationInfoArrayToDisplay]);
+  }, [reservationInfoArrayToDisplay, additionalInfo]);
 
   return (
     <div className="backgroundBlur">
@@ -226,6 +294,11 @@ const ReservationInfo = (props) => {
                 disabled={isInputDisabled[2]}
                 className="reservationInfoInput"
               ></input>
+              {dateStartError ? (
+                <div className="dateErrorMsg">Invalid Date</div>
+              ) : (
+                ""
+              )}
               <button
                 style={!isInputDisabled[2] ? { color: "green" } : {}}
                 onClick={() => handleEdit(2)}
@@ -247,6 +320,11 @@ const ReservationInfo = (props) => {
                 disabled={isInputDisabled[3]}
                 className="reservationInfoInput"
               ></input>
+              {dateEndError ? (
+                <div className="dateErrorMsg">Invalid Date</div>
+              ) : (
+                ""
+              )}
               <button
                 style={!isInputDisabled[3] ? { color: "green" } : {}}
                 onClick={() => handleEdit(3)}
@@ -324,6 +402,7 @@ const ReservationInfo = (props) => {
 
           <div id="reservationInfoRight">
             <textarea
+              style={textareaChanged}
               value={additionalInfo}
               onChange={(e) => setAdditionalInfo(e.target.value)}
               rows="2"

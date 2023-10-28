@@ -154,7 +154,7 @@ const ApartmentInfo = (props) => {
       }
     });
 
-    // PUT THIS IN USE EFFECT to solve that crappy bug
+    // make it a class instead of making values like this. it will solve that crappy bug i have a hunch lul
     if (arrayToHighlight) {
       setHighlitedElements(
         arrayToHighlight.map((ar) => {
@@ -186,7 +186,7 @@ const ApartmentInfo = (props) => {
 
     const getApartments = async () => {
       try {
-        const id = signedUser[0]; //BUGČINA AKO SE VIŠE LJUDI PRIJAVLJUJE NA ISTOM PCJU, MORAT CES POPRAVIT OVAJ SHIT
+        const id = signedUser[0]; //auth.user
         const response = await axiosPrivate.get(`/users/${id}`, {
           signal: controller.signal,
         });
@@ -199,12 +199,12 @@ const ApartmentInfo = (props) => {
     };
 
     getApartments();
-    console.log(highligtedElements);
+    console.log("ApartmentInfo useEffect");
     return () => {
       isMounted = false;
       controller.abort();
     };
-  }, []);
+  }, [reservationInfo]); // if we change reservation in ReservationInfo.js we wanna get apartments again from database
 
   const addApartment = async (apName) => {
     try {
@@ -375,6 +375,7 @@ const ApartmentInfo = (props) => {
           setIsReservationInfoVisible={setIsReservationInfoVisible}
           reservationInfo={reservationInfo}
           setReservationInfo={setReservationInfo}
+          apartments={apartments}
         />
       ) : (
         ""
