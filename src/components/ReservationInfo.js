@@ -71,7 +71,25 @@ const ReservationInfo = (props) => {
     setAdditionalInfo(res.additionalInfo);
   };
 
+  const [dateErrorStyle, setDateErrorStyle] = useState();
+
   const handleReservationMutation = async () => {
+    // if we have invalid date
+    if (dateStartError || dateEndError) {
+      setDateErrorStyle({
+        background: "rgba(255, 0, 0, 0.76)",
+        color: "rgb(80,0,0)",
+        transition: "linear 0.2s",
+      });
+      setTimeout(() => {
+        setDateErrorStyle({
+          background: "rgba(255, 95, 95, 0.66)",
+          color: "rgb(141, 0, 0)",
+          transition: "linear 0.2s",
+        });
+      }, 200);
+      return;
+    }
     const startDate = deFormatDate(reservationInfoArrayToDisplay[2]);
     const endDate = deFormatDate(reservationInfoArrayToDisplay[3]);
     startDate.setHours(2);
@@ -89,6 +107,15 @@ const ReservationInfo = (props) => {
         additionalInfo: additionalInfo,
         reservationIndex: reservationInfo.index,
       });
+
+      const responseParsed = JSON.parse(response.data);
+      setReservationInfo({
+        label: responseParsed.label,
+        index: responseParsed.index,
+        reservation: responseParsed.reservation,
+      });
+      console.log(reservationInfo);
+
       // changed inputs background to green
       if (response.status === 200) {
         if (textareaChanged.background === "rgba(255,175,0,0.12)")
@@ -99,13 +126,6 @@ const ReservationInfo = (props) => {
             temp[index] = { background: "rgba(0,255,0,0.3)" };
         });
         setChanged(temp);
-        setReservationInfo({
-          label: undefined,
-          index: undefined,
-          reservation: undefined,
-        });
-        // doesnt matter what we set, we just want a change to happen so useEffect in ApartmentInfo.js gets new data from database.
-        // could be optimized so it gets just changed data, not all
       }
     } catch (err) {
       console.error(err);
@@ -132,10 +152,6 @@ const ReservationInfo = (props) => {
     setIsInputDisabled(temp);
   };
 
-  const handleXMark = () => {};
-
-  const handleCheckMark = () => {};
-
   const exitReservationInfo = () => {
     setIsReservationInfoVisible(false); //lol
   };
@@ -157,6 +173,21 @@ const ReservationInfo = (props) => {
     return () => {};
   }, []);
 
+  const nextPrevResevation = () => {};
+
+  const deleteReservation = async () => {
+    console.log(res);
+    try {
+      await axiosPrivate.patch("/users/deleteReservation", {
+        username: "Jure",
+        apName: reservationInfoArrayToDisplay[0],
+        _id: res._id,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   // Detect changed input fields
   useEffect(() => {
     const { startFormated, endFormated } = formatDate(res.start, res.end);
@@ -177,10 +208,19 @@ const ReservationInfo = (props) => {
     )
       setTextAreaChanged({ background: "rgba(255,175,0,0.12)" });
     else setTextAreaChanged({ background: "rgb(235, 235, 235)" });
-    console.log(textareaChanged);
     let temp = changed.map((c) => c);
 
     startingValues.forEach((val, index) => {
+      // if we have date error we not gonna change the style
+      if (
+        (index === 1 && dateStartError === true) ||
+        (index === 2 && dateEndError === true)
+      ) {
+        if (index % 2 === 0) temp[index] = { background: "rgb(240,240,240)" };
+        else temp[index] = { background: "rgb(220,220,220)" };
+        return;
+      }
+      // now we can change style on change
       if (
         val != reservationInfoArrayToDisplay[index + 1] &&
         reservationInfoArrayToDisplay[index + 1] != "placeholder"
@@ -194,46 +234,54 @@ const ReservationInfo = (props) => {
         else temp[index] = { background: "rgb(220,220,220)" };
       }
       setChanged(temp);
-
-      // Check validity of dates, if there is an existing reservation
-      let apartment;
-      setDateStartError(false);
-      setDateEndError(false);
-      apartments.forEach((ap) => {
-        if (ap.label === reservationInfo.label) apartment = ap;
-      });
-
-      const checkStart = deFormatDate(reservationInfoArrayToDisplay[2]);
-      checkStart.setHours(2);
-      const checkEnd = deFormatDate(reservationInfoArrayToDisplay[3]);
-      checkEnd.setHours(2);
-      const allReservations = Array.from(apartment.reservations);
-      const filteredReservations = allReservations.filter(
-        (r, index) => index !== reservationInfo.index
-      );
-
-      if (checkStart.getTime() > checkEnd.getTime()) {
-        setDateStartError(true);
-        setDateEndError(true);
-      }
-      filteredReservations.forEach((r, index) => {
-        console.log(r);
-        const start = new Date(r.start);
-        const end = new Date(r.end);
-        if (
-          checkStart.getTime() >= start.getTime() &&
-          checkStart.getTime() < end.getTime()
-        )
-          setDateStartError(true);
-        if (
-          checkEnd.getTime() > start.getTime() &&
-          checkEnd.getTime() <= end.getTime()
-        )
-          setDateEndError(true);
-      });
     });
     return () => {};
-  }, [reservationInfoArrayToDisplay, additionalInfo]);
+  }, [
+    reservationInfoArrayToDisplay,
+    additionalInfo,
+    dateStartError,
+    dateEndError,
+  ]);
+
+  useEffect(() => {
+    // Check validity of dates, if there is an existing reservation
+    // i wanna put it in seperate useEffect that only executes when array[2] and [3] are modified
+    let apartment;
+    setDateStartError(false);
+    setDateEndError(false);
+    apartments.forEach((ap) => {
+      if (ap.label === reservationInfo.label) apartment = ap;
+    });
+
+    const checkStart = deFormatDate(reservationInfoArrayToDisplay[2]);
+    checkStart.setHours(2);
+    const checkEnd = deFormatDate(reservationInfoArrayToDisplay[3]);
+    checkEnd.setHours(2);
+    const allReservations = Array.from(apartment.reservations);
+    const filteredReservations = allReservations.filter(
+      (r, index) => index !== reservationInfo.index
+    );
+
+    if (checkStart.getTime() > checkEnd.getTime()) {
+      setDateStartError(true);
+      setDateEndError(true);
+    }
+    filteredReservations.forEach((r, index) => {
+      console.log(r);
+      const start = new Date(r.start);
+      const end = new Date(r.end);
+      if (
+        checkStart.getTime() >= start.getTime() &&
+        checkStart.getTime() < end.getTime()
+      )
+        setDateStartError(true);
+      if (
+        checkEnd.getTime() > start.getTime() &&
+        checkEnd.getTime() <= end.getTime()
+      )
+        setDateEndError(true);
+    });
+  }, [reservationInfoArrayToDisplay[2], reservationInfoArrayToDisplay[3]]);
 
   return (
     <div className="backgroundBlur">
@@ -292,10 +340,12 @@ const ReservationInfo = (props) => {
                   handleInputChange(e, 2);
                 }}
                 disabled={isInputDisabled[2]}
-                className="reservationInfoInput"
+                className="reservationInfoInputDate"
               ></input>
               {dateStartError ? (
-                <div className="dateErrorMsg">Invalid Date</div>
+                <div style={dateErrorStyle} className="dateErrorMsg">
+                  Invalid Date
+                </div>
               ) : (
                 ""
               )}
@@ -318,10 +368,12 @@ const ReservationInfo = (props) => {
                   handleInputChange(e, 3);
                 }}
                 disabled={isInputDisabled[3]}
-                className="reservationInfoInput"
+                className="reservationInfoInputDate"
               ></input>
               {dateEndError ? (
-                <div className="dateErrorMsg">Invalid Date</div>
+                <div style={dateErrorStyle} className="dateErrorMsg">
+                  Invalid Date
+                </div>
               ) : (
                 ""
               )}
@@ -420,6 +472,13 @@ const ReservationInfo = (props) => {
             className="noStyleButtonResInfo"
           >
             Confirm
+          </button>
+          <button
+            onClick={deleteReservation}
+            id="deleteButton"
+            className="noStyleButtonResInfo"
+          >
+            Delete
           </button>
           <button id="nextButton" className="noStyleButtonResInfo">
             Next

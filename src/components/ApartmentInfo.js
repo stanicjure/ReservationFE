@@ -199,7 +199,6 @@ const ApartmentInfo = (props) => {
     };
 
     getApartments();
-    console.log("ApartmentInfo useEffect");
     return () => {
       isMounted = false;
       controller.abort();
@@ -276,6 +275,9 @@ const ApartmentInfo = (props) => {
     });
     if (res) {
       setReservationInfo({ label: apName, index: resIndex, reservation: res });
+      console.log("s krivog mista");
+      console.log(reservationInfo);
+      console.log("dolazi");
       setIsReservationInfoVisible(true);
     }
   };

@@ -117,12 +117,17 @@
   color: rgb(141, 0, 0);
   font-weight: 600;
   position: absolute;
-  left: 0px;
-  transform: translate(-100%, 0);
-  height: 2.4rem;
+  left: 8rem;
+  transform: translate(80%, 0);
+  height: 2rem;
+  width: 8rem;
   display: flex;
   align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  cursor: default;
 }
+
 .checkButton {
   background-color: transparent;
   border: none;
@@ -146,12 +151,29 @@
   border-color: rgba(0, 0, 0, 0);
   color: black;
 }
+.reservationInfoInputDate {
+  height: 1.8rem;
+  font-size: 1rem;
+  width: 32%;
+  padding: 4px;
+  background-color: rgba(240, 248, 255, 0);
+  border-color: rgba(0, 0, 0, 0);
+  color: black;
+}
 .reservationInfoInput:enabled {
   font-size: 1rem;
   background-color: rgb(14, 14, 14);
   border-radius: 0.3rem;
   color: whitesmoke;
   color-scheme: dark;
+}
+.reservationInfoInputDate:enabled {
+  font-size: 1rem;
+  background-color: rgb(14, 14, 14);
+  border-radius: 0.3rem;
+  color: whitesmoke;
+  color-scheme: dark;
+  width: 32%;
 }
 #footer {
   background-color: rgba(133, 133, 133, 0.74);
@@ -176,18 +198,32 @@
   border-radius: 0.7rem;
 }
 #previousButton {
-  background-color: red;
+  background-color: rgb(60, 60, 60);
   position: absolute;
   left: 10px;
 }
+#previousButton:hover {
+  background-color: rgb(83, 83, 83);
+}
+#nextButton:hover {
+  background-color: rgb(83, 83, 83);
+}
 #nextButton {
-  background-color: green;
+  background-color: rgb(60, 60, 60);
   position: absolute;
   right: 10px;
 }
 #confirmButton {
   background-color: rgb(0, 88, 0);
+  margin-right: 2rem;
 }
 #confirmButton:hover {
   background-color: green;
+}
+#deleteButton {
+  background-color: rgb(196, 0, 0);
+  margin-left: 2rem;
+}
+#deleteButton:hover {
+  background-color: red;
 }
