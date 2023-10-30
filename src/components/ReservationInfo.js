@@ -31,6 +31,7 @@ const ReservationInfo = (props) => {
     reservationInfo,
     setReservationInfo,
     apartments,
+    setApartmentsChanged,
   } = props;
 
   // only used to get username for axios
@@ -48,7 +49,7 @@ const ReservationInfo = (props) => {
     ]);
   const [additionalInfo, setAdditionalInfo] = useState("placeholder"); // textarea
 
-  const res = reservationInfo.reservation; //clicked reservation
+  const [res, setRes] = useState(reservationInfo.reservation); //clicked reservation
 
   //style for changed input fields
   const [changed, setChanged] = useState([]);
@@ -108,13 +109,15 @@ const ReservationInfo = (props) => {
         reservationIndex: reservationInfo.index,
       });
 
+      if (response) setApartmentsChanged((prev) => !prev);
       const responseParsed = JSON.parse(response.data);
       setReservationInfo({
         label: responseParsed.label,
         index: responseParsed.index,
         reservation: responseParsed.reservation,
       });
-      console.log(reservationInfo);
+
+      setIsInputDisabled([true, true, true, true, true, true, true]);
 
       // changed inputs background to green
       if (response.status === 200) {
@@ -173,16 +176,62 @@ const ReservationInfo = (props) => {
     return () => {};
   }, []);
 
-  const nextPrevResevation = () => {};
+  const setEverything = (reservations, index) => {
+    const reservation = reservations[index];
+
+    const { startFormated, endFormated } = formatDate(
+      reservation.start,
+      reservation.end
+    );
+    setReservationInfoArrayToDisplay([
+      reservationInfo.label,
+      reservation.guestName,
+      startFormated,
+      endFormated,
+      reservation.price,
+      reservation.persons,
+      reservation.children,
+    ]);
+    setReservationInfo({
+      label: reservationInfo.label,
+      index: index,
+      reservation: reservation,
+    });
+
+    setAdditionalInfo(reservation.additionalInfo);
+    setRes(reservation);
+    setIsInputDisabled([true, true, true, true, true, true, true]);
+  };
+
+  const nextPrevResevation = (nextPrev) => {
+    apartments.forEach((ap) => {
+      if (ap.label === reservationInfo.label) {
+        const reservations = Array.from(ap.reservations);
+        let index;
+        if (
+          reservationInfo.index + nextPrev < reservations.length &&
+          reservationInfo.index + nextPrev > 0
+        )
+          index = reservationInfo.index + nextPrev;
+        else if (reservationInfo.index + nextPrev < 0)
+          index = reservations.length - 1;
+        else index = 0;
+
+        setEverything(reservations, index);
+      }
+    });
+  };
 
   const deleteReservation = async () => {
-    console.log(res);
     try {
-      await axiosPrivate.patch("/users/deleteReservation", {
+      const resp = await axiosPrivate.patch("/users/deleteReservation", {
         username: "Jure",
         apName: reservationInfoArrayToDisplay[0],
         _id: res._id,
       });
+      setApartmentsChanged((prev) => !prev);
+      //setEverything(resp.data.newReservations, resp.data.index); // zasto ovo ne radi
+      nextPrevResevation(1); // a ovo radi, B T J
     } catch (err) {
       console.log(err);
     }
@@ -245,7 +294,6 @@ const ReservationInfo = (props) => {
 
   useEffect(() => {
     // Check validity of dates, if there is an existing reservation
-    // i wanna put it in seperate useEffect that only executes when array[2] and [3] are modified
     let apartment;
     setDateStartError(false);
     setDateEndError(false);
@@ -463,7 +511,11 @@ const ReservationInfo = (props) => {
           </div>
         </div>
         <div id="footer">
-          <button id="previousButton" className="noStyleButtonResInfo">
+          <button
+            onClick={() => nextPrevResevation(-1)}
+            id="previousButton"
+            className="noStyleButtonResInfo"
+          >
             Previous
           </button>
           <button
@@ -480,7 +532,11 @@ const ReservationInfo = (props) => {
           >
             Delete
           </button>
-          <button id="nextButton" className="noStyleButtonResInfo">
+          <button
+            onClick={() => nextPrevResevation(1)}
+            id="nextButton"
+            className="noStyleButtonResInfo"
+          >
             Next
           </button>
         </div>

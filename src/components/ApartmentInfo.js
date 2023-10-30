@@ -23,6 +23,7 @@ const ApartmentInfo = (props) => {
   const [reservationFormActive, setReservationFormActive] = useState(false);
   const [addApartmentActive, setAddApartmentActive] = useState(false);
   const [apartments, setApartments] = useState([]);
+  const [apartmentsChanged, setApartmentsChanged] = useState(false); // will be used to detect changes made in reservationsInfo
 
   // for highlighting hovered reservation
   const boxRef = useRef({});
@@ -191,7 +192,8 @@ const ApartmentInfo = (props) => {
           signal: controller.signal,
         });
         const apartmentsArray = response.data.apartments;
-        setApartments(apartmentsArray.map((ap) => ap));
+        setApartments([...apartmentsArray]);
+        console.log(apartments);
         setApartmentsNames(apartmentsArray.map((item) => item.label));
       } catch (err) {
         console.error(err);
@@ -199,11 +201,12 @@ const ApartmentInfo = (props) => {
     };
 
     getApartments();
+
     return () => {
       isMounted = false;
       controller.abort();
     };
-  }, [reservationInfo]); // if we change reservation in ReservationInfo.js we wanna get apartments again from database
+  }, [apartmentsChanged]); // if we change reservation in ReservationInfo.js we wanna get apartments again from database
 
   const addApartment = async (apName) => {
     try {
@@ -275,9 +278,6 @@ const ApartmentInfo = (props) => {
     });
     if (res) {
       setReservationInfo({ label: apName, index: resIndex, reservation: res });
-      console.log("s krivog mista");
-      console.log(reservationInfo);
-      console.log("dolazi");
       setIsReservationInfoVisible(true);
     }
   };
@@ -378,6 +378,7 @@ const ApartmentInfo = (props) => {
           reservationInfo={reservationInfo}
           setReservationInfo={setReservationInfo}
           apartments={apartments}
+          setApartmentsChanged={setApartmentsChanged}
         />
       ) : (
         ""
