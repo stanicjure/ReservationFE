@@ -3,6 +3,8 @@ import "../styles/ReservationForm.css";
 import { ConfirmAction } from "./ConfirmAction";
 import { axiosPrivate } from "../api/axios";
 import useInfoPop from "../hooks/useInfoPop";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
 
 export const ResevationForm = (props) => {
   const {
@@ -10,11 +12,12 @@ export const ResevationForm = (props) => {
     setIsActive,
     reservationApartment,
     setReservationApartment,
+    apartments,
   } = props;
-  let { apartments } = props;
-  let aps = Array.from(apartments);
+  let { apartmentsNames } = props;
+  let aps = Array.from(apartmentsNames);
 
-  const [apartmentName, setApartmenName] = useState(apartments[0]);
+  const [apartmentName, setApartmenName] = useState(apartmentsNames[0]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [price, setPrice] = useState("");
@@ -23,16 +26,25 @@ export const ResevationForm = (props) => {
   const [children, setChildren] = useState("");
   const [additionalInfo, setAdditionalInfo] = useState("");
   const [errMsg, setErrMsg] = useState("");
-  const [txt, setTxt] = useState();
-  const [temp, setTemp] = useState();
-  const [functionToForward, setFunctionToForward] = useState();
+
+  const [startDateErr, setStartDateErr] = useState("");
+  const [endDateErr, setEndDateErr] = useState("");
+
+  const requireStartRef = useRef();
+  const requireEndRef = useRef();
+  const requirePersonsRef = useRef();
+  const requirePriceRef = useRef();
+
+  const requiredInputArray = [
+    requireStartRef,
+    requireEndRef,
+    requirePersonsRef,
+    requirePriceRef,
+  ];
 
   const [InfoPop, visible, setVisible, setItem, setInfoTxt] = useInfoPop("");
 
   const inputRef1 = useRef();
-  const errRef = useRef();
-  const confirmPopRef = useRef();
-  const confirmStyle = "bigConfirm";
 
   useEffect(() => {
     inputRef1.current.focus();
@@ -52,23 +64,81 @@ export const ResevationForm = (props) => {
       aps.splice(index, 1);
       aps = [reservationApartment, ...aps];
     } else {
-      aps = [...apartments];
+      aps = [...apartmentsNames];
     }
   }, [aps]);
 
-  const handleAddReservation = () => {
-    setTxt("Are you sure you want to add following reservation:");
-    setTemp([
-      { info: "Apartment:", item: apartmentName },
-      { info: "Persons:", item: persons },
-      { info: "Price:", item: price },
-      { info: "Arrive Date:", item: startDate },
-      { info: "Leave Date:", item: endDate },
-    ]);
-    setFunctionToForward("addReservation");
+  const chechReservationDatesValidity = () => {
+    apartments.forEach((ap) => {
+      if (ap.label == apartmentName) {
+        console.log(ap.label);
+        const reservations = Array.from(ap.reservations);
+
+        setStartDateErr("");
+        setEndDateErr("");
+
+        reservations.forEach((r) => {
+          const start = new Date(r.start);
+          const end = new Date(r.end);
+
+          const currentStart = new Date(startDate);
+          const currentEnd = new Date(endDate);
+
+          start.setHours(2);
+          end.setHours(2);
+          currentStart.setHours(2);
+          currentEnd.setHours(2);
+
+          if (
+            currentStart.getTime() > currentEnd.getTime() &&
+            currentStart &&
+            currentEnd
+          ) {
+            setStartDateErr("Invalid Date");
+            setEndDateErr("Invalid Date");
+          }
+
+          if (
+            currentStart.getTime() >= start.getTime() &&
+            currentStart.getTime() < end.getTime()
+          ) {
+            setStartDateErr("Existing Reservation");
+          }
+
+          if (
+            currentEnd.getTime() > start.getTime() &&
+            currentEnd.getTime() <= end.getTime()
+          ) {
+            setEndDateErr("Existing Reservation");
+          }
+        });
+      }
+    });
+
+    console.log(startDateErr);
   };
 
-  const addReservation = async () => {
+  // checking validity of dates
+  useEffect(() => {
+    chechReservationDatesValidity();
+  }, [startDate, endDate]);
+
+  const addReservation = async (e) => {
+    e.preventDefault();
+    console.log(e.target.value);
+    requiredInputArray.forEach((r) => {
+      if (!r.current.value) {
+        r.current.style.backgroundColor = "rgba(50,0,0,0.3)";
+        r.current.style.transition = "ease-out 0.4s";
+        r.current.style.color = "black";
+        setTimeout(() => {
+          r.current.style.backgroundColor = "white";
+          r.current.style.transition = "ease-in 0.3s";
+          r.current.style.color = "black";
+        }, 400);
+      }
+    });
+    console.log(requireStartRef);
     try {
       const response = await axiosPrivate.patch("/users/apartments", {
         username: username,
@@ -96,18 +166,6 @@ export const ResevationForm = (props) => {
   return (
     <>
       {InfoPop}
-      {temp ? (
-        <ConfirmAction
-          txt={txt}
-          item={temp}
-          setItem={setTemp}
-          confirmStyle={confirmStyle}
-          setFunctionToForward={setFunctionToForward}
-          fnction={functionToForward === "addReservation" ? addReservation : ""}
-        />
-      ) : (
-        ""
-      )}
       <div className="backgroundBlur">
         <div id="mainContainerReservation">
           <form>
@@ -148,8 +206,15 @@ export const ResevationForm = (props) => {
                 </div>
                 <div className="formInputs">
                   <label className="reservationFormLabels">
-                    Arrive Date <br></br>
+                    Arrive Date <span className="requiredSymbol">*</span>{" "}
+                    <br></br>
+                    {startDateErr ? (
+                      <span className="errDate">{startDateErr}</span>
+                    ) : (
+                      ""
+                    )}
                     <input
+                      ref={requireStartRef}
                       value={startDate}
                       onChange={(e) => setStartDate(e.target.value)}
                       className="reservationFormInputs"
@@ -160,8 +225,15 @@ export const ResevationForm = (props) => {
                 </div>
                 <div className="formInputs">
                   <label className="reservationFormLabels">
-                    Leave Date <br></br>
+                    Leave Date <span className="requiredSymbol">*</span>{" "}
+                    <br></br>
+                    {endDateErr ? (
+                      <span className="errDate">{endDateErr}</span>
+                    ) : (
+                      ""
+                    )}
                     <input
+                      ref={requireEndRef}
                       value={endDate}
                       onChange={(e) => setEndDate(e.target.value)}
                       className="reservationFormInputs"
@@ -174,8 +246,10 @@ export const ResevationForm = (props) => {
               <div id="reservationFormMiddle">
                 <div className="formInputs">
                   <label className="reservationFormLabels">
-                    Persons <br></br>
+                    Persons <span className="requiredSymbol">*</span>
+                    <br></br>
                     <input
+                      ref={requirePersonsRef}
                       value={persons}
                       onChange={(e) => setPersons(e.target.value)}
                       className="reservationFormInputs"
@@ -197,8 +271,10 @@ export const ResevationForm = (props) => {
                 </div>
                 <div className="formInputs">
                   <label className="reservationFormLabels">
-                    Price <br></br>
+                    Price <span className="requiredSymbol">*</span>
+                    <br></br>
                     <input
+                      ref={requirePriceRef}
                       value={price}
                       onChange={(e) => setPrice(e.target.value)}
                       className="reservationFormInputs"
@@ -229,8 +305,8 @@ export const ResevationForm = (props) => {
             <div id="reservationFormButtonsContainer">
               <button
                 className="reservationFormSubmitButton"
-                type="button"
-                onClick={handleAddReservation}
+                type="submit"
+                onClick={(e) => addReservation(e)}
               >
                 Submit
               </button>

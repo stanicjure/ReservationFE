@@ -387,9 +387,10 @@ const ApartmentInfo = (props) => {
         <ResevationForm
           setIsActive={setReservationFormActive}
           username={signedUser[0]}
-          apartments={apartmentsNames}
+          apartmentsNames={apartmentsNames}
           reservationApartment={reservationApartment}
           setReservationApartment={setReservationApartment}
+          apartments={apartments}
         />
       ) : (
         ""

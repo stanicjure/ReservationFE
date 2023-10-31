@@ -50,11 +50,16 @@
   padding: 0.25rem;
   border-radius: 0px;
   width: 100%;
+  margin-top: 0.2rem;
 }
 .reservationFormInputs:focus {
   border-radius: 0rem;
   background-color: rgb(68, 68, 68);
   color: white;
+}
+.requiredSymbol {
+  color: rgb(204, 0, 0);
+  font-size: 1.15rem;
 }
 #reservationFormButtonsContainer {
   display: flex;
@@ -85,6 +90,7 @@
   margin-bottom: 0.2rem;
 }
 .reservationFormLabels {
+  position: relative;
   font-weight: bold;
   color: rgb(24, 24, 24);
 }
@@ -100,4 +106,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.errDate {
+  border: solid 1px rgb(185, 0, 0);
+  border-radius: 0.25rem;
+  padding-right: 5px;
+  padding-left: 5px;
+  background-color: rgba(255, 86, 86, 0.555);
+  color: rgb(168, 0, 0);
+  font-weight: 500;
 }
