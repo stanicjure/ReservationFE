@@ -11,6 +11,7 @@ import Editor from "./components/Editor";
 import Admin from "./components/Admin";
 import Lounge from "./components/Lounge";
 import Missing from "./components/Missing";
+import Stats from "./components/Stats";
 import Layout from "./components/Layout";
 import RequireAuth from "./components/RequireAuth";
 import PersistLogin from "./components/PersistLogin";
@@ -39,6 +40,9 @@ function App() {
           </Route>
           <Route element={<RequireAuth allowedRoles={[1984, 5050]} />}>
             <Route path="lounge" element={<Lounge />} />
+          </Route>
+          <Route element={<RequireAuth allowedRoles={[1984, 5050]} />}>
+            <Route path="stats" element={<Stats />} />
           </Route>
         </Route>
 

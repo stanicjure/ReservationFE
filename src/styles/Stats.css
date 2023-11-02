@@ -1,0 +1,38 @@
+#statsContainer {
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  min-height: 100vh;
+  background-color: whitesmoke;
+  color: black;
+  display: flex;
+}
+#totalHeader {
+  border-bottom: solid 2px black;
+  background-color: rgb(75, 75, 75);
+  color: white;
+  font-size: 1.2rem;
+}
+.total {
+  border: solid 2px;
+  position: absolute;
+  top: 60px;
+  z-index: 2;
+  margin-top: 4px;
+  margin-left: 4px;
+}
+#statContainer {
+  display: flex;
+  font-size: 0.95rem;
+}
+.verticalBorder {
+  border-right: solid 2px;
+}
+.statName {
+  background-color: rgba(190, 190, 190, 0.322);
+  color: rgb(0, 0, 0);
+  padding-right: 0.3rem;
+  padding-left: 0.3rem;
+  display: flex;
+  border-bottom: solid 1px;
+}

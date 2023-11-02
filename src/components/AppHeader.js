@@ -3,9 +3,16 @@ import { Link } from "react-router-dom";
 
 const AppHeader = () => {
   return (
-    <div id="header">
-      <Link to="/">Home</Link>
-    </div>
+    <>
+      <div className="header">
+        <Link className="headerItem" to="/">
+          Home
+        </Link>
+        <Link className="headerItem" to="/stats">
+          Stats
+        </Link>
+      </div>
+    </>
   );
 };
 

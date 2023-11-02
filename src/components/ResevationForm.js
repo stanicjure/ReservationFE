@@ -125,7 +125,6 @@ export const ResevationForm = (props) => {
 
   const addReservation = async (e) => {
     e.preventDefault();
-    console.log(e.target.value);
     requiredInputArray.forEach((r) => {
       if (!r.current.value) {
         r.current.style.backgroundColor = "rgba(50,0,0,0.3)";
@@ -138,7 +137,6 @@ export const ResevationForm = (props) => {
         }, 400);
       }
     });
-    console.log(requireStartRef);
     try {
       const response = await axiosPrivate.patch("/users/apartments", {
         username: username,
