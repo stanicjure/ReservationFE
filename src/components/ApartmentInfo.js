@@ -193,7 +193,6 @@ const ApartmentInfo = (props) => {
         });
         const apartmentsArray = response.data.apartments;
         setApartments([...apartmentsArray]);
-        console.log(apartments);
         setApartmentsNames(apartmentsArray.map((item) => item.label));
       } catch (err) {
         console.error(err);
