@@ -94,7 +94,11 @@
 .apStatsItemBody {
   width: 8vw;
   font-size: 0.8rem;
-  border-right: solid 1px white;
+  border-right: solid 1px black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 4vh;
 }
 .apStatsApartmentName {
   width: 10vw;
@@ -105,7 +109,11 @@
 .apStatsApartmentNameBody {
   width: 10vw;
   font-size: 0.8rem;
-  border-right: solid 1px white;
+  border-right: solid 1px black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 4vh;
 }
 .apStatsEarningsItem {
   width: 10vw;
@@ -116,6 +124,10 @@
   width: 10vw;
   font-size: 0.8rem;
   text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 4vh;
 }
 
 #apartmentStatsBodyContainer {
@@ -126,17 +138,18 @@
 
   margin-left: 5px;
   margin-right: 5px;
-  background-color: gray;
 }
 .apartmentRow {
   display: flex;
   width: 100%;
   font-size: 0.15rem;
+  border-bottom: solid 1px black;
+  align-items: center;
 }
 .apartmentStatsBig {
   width: 62%;
   display: flex;
-  border-right: solid 2px white;
+  border-right: solid 2px black;
 }
 .apartmentStatsSmall {
   width: 38%;

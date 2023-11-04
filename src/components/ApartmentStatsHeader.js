@@ -1,5 +1,7 @@
 import React from "react";
 import "../styles/Stats.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSort } from "@fortawesome/free-solid-svg-icons";
 
 const ApartmentStatsHeader = () => {
   return (
@@ -10,6 +12,9 @@ const ApartmentStatsHeader = () => {
           <div className="apStatsHeaderBottom">
             <div className="apStatsApartmentName">
               <p>Apartment</p>
+              <button className="noStyleButton">
+                <FontAwesomeIcon icon={faSort} />
+              </button>
             </div>
             <div className="apStatsItem">
               <p>Guests</p>

@@ -315,7 +315,6 @@ const ReservationInfo = (props) => {
       setDateEndError(true);
     }
     filteredReservations.forEach((r, index) => {
-      console.log(r);
       const start = new Date(r.start);
       const end = new Date(r.end);
       if (
