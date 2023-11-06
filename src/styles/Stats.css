@@ -90,6 +90,27 @@
   font-size: 0.85rem;
   border-right: solid 1px white;
   text-align: center;
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+.sortButton {
+  background-color: transparent;
+  border: none;
+  margin: 0;
+  padding: 0;
+  text-align: inherit;
+  font: inherit;
+  border-radius: 0;
+  appearance: none;
+  cursor: pointer;
+  color: white;
+  position: absolute;
+  right: 5px;
+  font-size: 0.7rem;
+}
+.sortButton:hover {
+  color: rgb(252, 255, 54);
 }
 .apStatsItemBody {
   width: 8vw;
@@ -119,6 +140,9 @@
   width: 10vw;
   font-size: 0.85rem;
   text-align: center;
+  display: flex;
+  position: relative;
+  justify-content: center;
 }
 .apStatsEarningsItemBody {
   width: 10vw;

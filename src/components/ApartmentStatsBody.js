@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../styles/Stats.css";
 
 const ApartmentStatsBody = (props) => {
-  const { apartments } = props;
-  const [totalStats, setTotalStats] = useState([]);
+  const { apartments, totalStats, setTotalStats } = props;
 
   const getTotalStats = () => {
     let totalStatsArray = new Array();
@@ -53,7 +52,7 @@ const ApartmentStatsBody = (props) => {
   return (
     <>
       <div id="apartmentStatsBodyContainer">
-        {apartments.map((ap, index) => {
+        {totalStats.map((total, index) => {
           return (
             <div
               style={
@@ -61,7 +60,7 @@ const ApartmentStatsBody = (props) => {
                   ? { backgroundColor: "rgba(200,200,200,0.8)" }
                   : { backgroundColor: "rgba(180,180,180,0.8)" }
               }
-              key={ap.label}
+              key={total.apName}
               className="apartmentRow"
             >
               <div className="apartmentStatsBig">
@@ -78,16 +77,16 @@ const ApartmentStatsBody = (props) => {
                   {totalStats.length !== 0 ? totalStats[index].children : ""}
                 </div>
                 <div className="apStatsItemBody">
-                  {totalStats.length !== 0
-                    ? totalStats[index].reservations
-                    : ""}
+                  {totalStats.length !== 0 ? totalStats[index].earnings : ""}
                 </div>
                 <div className="apStatsItemBody">
                   {" "}
                   {totalStats.length !== 0 ? totalStats[index].days : ""}
                 </div>
                 <div className="apStatsEarningsItemBody">
-                  {totalStats.length !== 0 ? totalStats[index].earnings : ""}
+                  {totalStats.length !== 0
+                    ? totalStats[index].reservations
+                    : ""}
                 </div>
               </div>
               <div className="apartmentStatsSmall">

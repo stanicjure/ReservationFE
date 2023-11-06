@@ -11,6 +11,7 @@ const Stats = () => {
   const axiosPrivate = useAxiosPrivate();
 
   const [apartments, setApartments] = useState([]);
+  const [totalStats, setTotalStats] = useState([]);
 
   useEffect(() => {
     let isMounted = true;
@@ -41,8 +42,15 @@ const Stats = () => {
     <div id="statsContainer">
       <AppHeader />
       <GeneralStats apartments={apartments} />
-      <ApartmentStatsHeader />
-      <ApartmentStatsBody apartments={apartments} />
+      <ApartmentStatsHeader
+        totalStats={totalStats}
+        setTotalStats={setTotalStats}
+      />
+      <ApartmentStatsBody
+        apartments={apartments}
+        totalStats={totalStats}
+        setTotalStats={setTotalStats}
+      />
     </div>
   );
 };
