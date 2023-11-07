@@ -40,11 +40,17 @@ const ApartmentStatsBody = (props) => {
           reservations: reservations,
           days: numberOfDays,
           earnings: earnings,
+          guestsA: ((adults + children) / reservations).toFixed(1),
+          adultsA: (adults / reservations).toFixed(1),
+          childrenA: (children / reservations).toFixed(1),
+          daysA: (numberOfDays / reservations).toFixed(1),
+          earningsA: (earnings / numberOfDays).toFixed(1),
         },
       ];
     });
     setTotalStats([...totalStatsArray]);
   };
+
   useEffect(() => {
     getTotalStats();
   }, [apartments]);
@@ -80,7 +86,6 @@ const ApartmentStatsBody = (props) => {
                   {totalStats.length !== 0 ? totalStats[index].earnings : ""}
                 </div>
                 <div className="apStatsItemBody">
-                  {" "}
                   {totalStats.length !== 0 ? totalStats[index].days : ""}
                 </div>
                 <div className="apStatsEarningsItemBody">
@@ -90,12 +95,21 @@ const ApartmentStatsBody = (props) => {
                 </div>
               </div>
               <div className="apartmentStatsSmall">
-                {" "}
-                <div className="apStatsItem">hehehe</div>
-                <div className="apStatsItem">hehehe</div>
-                <div className="apStatsItem">hehehe</div>
-                <div className="apStatsItem">hehehe</div>
-                <div className="apStatsEarningsItem">hehehe</div>
+                <div className="apStatsItemBody">
+                  {totalStats.length !== 0 ? totalStats[index].guestsA : ""}
+                </div>
+                <div className="apStatsItemBody">
+                  {totalStats.length !== 0 ? totalStats[index].adultsA : ""}
+                </div>
+                <div className="apStatsItemBody">
+                  {totalStats.length !== 0 ? totalStats[index].childrenA : ""}
+                </div>
+                <div className="apStatsItemBody">
+                  {totalStats.length !== 0 ? totalStats[index].daysA : ""}
+                </div>
+                <div className="apStatsEarningsItemBody">
+                  {totalStats.length !== 0 ? totalStats[index].earningsA : ""}
+                </div>
               </div>
             </div>
           );

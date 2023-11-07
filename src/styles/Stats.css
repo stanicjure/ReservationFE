@@ -72,9 +72,7 @@
 }
 #blankHeader {
   min-width: 10vw;
-  background-image: linear-gradient(to left, #d8d8d8 10%, green 40%);
-  background-size: 2px;
-  background-color: rgb(230, 230, 230);
+  background-color: rgb(70, 70, 70);
   border-bottom: solid 2px white;
   border-right: solid 1px white;
 }
