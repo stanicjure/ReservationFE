@@ -128,7 +128,9 @@ const ApartmentInfo = (props) => {
         ap?.reservations.forEach((re) => {
           const start = new Date(re.start);
           const end = new Date(re.end);
-          const counter = new Date(re.start);
+          const counter = new Date(yearDisplay, monthDisplay, 1);
+          counter.setHours(2);
+          console.log(counter);
           if (
             hovered.getTime() >= start.getTime() &&
             hovered.getTime() <= end.getTime()

@@ -48,7 +48,7 @@ const ApartmentStatsHeader = (props) => {
     if (item === 5) {
       totalStatsArray.sort((a, b) => {
         if (ascendingDescending[5]) return b.reservations - a.reservations;
-        else return a.reservations + b.reservations;
+        else return a.reservations - b.reservations;
       });
       ascendingDescending = [1, 1, 1, 1, 1, !ascendingDescending[5]];
     }
@@ -59,7 +59,9 @@ const ApartmentStatsHeader = (props) => {
     <div id="apartmentStatsContainer">
       <div id="apartmentStatsHeader">
         <div className="apStatsTotal">
-          <div className="apStatsHeaderTop">Total</div>
+          <div className="apStatsHeaderTop">
+            <div id="blankHeader"></div> <div id="realHeader">Total</div>
+          </div>
           <div className="apStatsHeaderBottom">
             <div className="apStatsApartmentName">
               <p>Apartment</p>
@@ -121,7 +123,9 @@ const ApartmentStatsHeader = (props) => {
           </div>
         </div>
         <div className="apStatsAverage">
-          <div className="apStatsHeaderTop">Average</div>
+          <div className="apStatsHeaderTop">
+            <div id="realHeader">Average</div>
+          </div>
           <div className="apStatsHeaderBottom">
             <div className="apStatsItem">
               <p>Guests</p>
