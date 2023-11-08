@@ -5,7 +5,7 @@ const GeneralStats = (props) => {
   const [totalStats, setTotalStats] = useState([]);
   const [averageReservation, setAverageReservation] = useState([]);
   const [averageApartment, setAverageApartment] = useState([]);
-  const { apartments } = props;
+  const { apartments, yearCondition } = props;
 
   const getGeneralStats = () => {
     let guests = 0,
@@ -15,22 +15,49 @@ const GeneralStats = (props) => {
       earnings = 0,
       reservationNumber = 0,
       totalNumberOfDays = 0;
-    apartments.forEach((ap) =>
+    apartments.forEach((ap) => {
+      let start,
+        end = new Date();
+
       ap.reservations.forEach((r) => {
+        let numberOfDays = 0;
+        start = new Date(r.start);
+        if (end.getTime() === start.getTime() && r.start !== r.end)
+          numberOfDays--; // if next reservation begins when last one ended
+
+        end = new Date(r.end);
+        const counter = new Date(r.start);
+
+        //if we have year condition
+        if (
+          start.getFullYear() != yearCondition &&
+          end.getFullYear() != yearCondition &&
+          yearCondition !== "alltime"
+        )
+          return;
+
+        /////////////////////
+        while (counter.getTime() <= end.getTime()) {
+          if (
+            counter.getFullYear() == yearCondition &&
+            yearCondition !== "alltime"
+          )
+            numberOfDays++;
+          else if (yearCondition === "alltime") numberOfDays++;
+
+          counter.setDate(counter.getDate() + 1);
+        }
+        earnings += numberOfDays * r.price;
+        totalNumberOfDays += numberOfDays;
+        ////////////////////
+
+        //
         reservationNumber++;
         adults += r.persons;
         children += r.children;
         reservations += 1;
-
-        const start = new Date(r.start);
-        const end = new Date(r.end);
-        const numberOfDays = Math.round(
-          (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24) + 1
-        );
-        earnings += numberOfDays * r.price;
-        totalNumberOfDays += numberOfDays;
-      })
-    );
+      });
+    });
     guests = adults + children;
     setTotalStats([guests, adults, children, reservations, earnings]);
     const guestsPerReservation = (guests / reservationNumber).toFixed(1);
@@ -69,7 +96,7 @@ const GeneralStats = (props) => {
 
   useEffect(() => {
     getGeneralStats();
-  }, [apartments]);
+  }, [apartments, yearCondition]);
 
   return (
     <div className="generalContainer">

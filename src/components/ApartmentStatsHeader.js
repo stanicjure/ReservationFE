@@ -116,12 +116,12 @@ const ApartmentStatsHeader = (props) => {
         1,
         1,
         1,
-        1,
-        1,
-        1,
-        1,
-        1,
         !ascendingDescending[5],
+        1,
+        1,
+        1,
+        1,
+        1,
       ];
     }
     if (item === 6) {

@@ -6,12 +6,15 @@ import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import GeneralStats from "./GeneralStats";
 import ApartmentStatsHeader from "./ApartmentStatsHeader";
 import ApartmentStatsBody from "./ApartmentStatsBody";
+import StatsHeader from "./StatsHeader";
 
 const Stats = () => {
   const axiosPrivate = useAxiosPrivate();
 
   const [apartments, setApartments] = useState([]);
   const [totalStats, setTotalStats] = useState([]);
+  const currentYear = new Date();
+  const [yearCondition, setYearCondition] = useState("alltime");
 
   useEffect(() => {
     let isMounted = true;
@@ -41,7 +44,11 @@ const Stats = () => {
   return (
     <div id="statsContainer">
       <AppHeader />
-      <GeneralStats apartments={apartments} />
+      <StatsHeader
+        apartments={apartments}
+        setYearCondition={setYearCondition}
+      />
+      <GeneralStats apartments={apartments} yearCondition={yearCondition} />
       <ApartmentStatsHeader
         totalStats={totalStats}
         setTotalStats={setTotalStats}
@@ -50,6 +57,7 @@ const Stats = () => {
         apartments={apartments}
         totalStats={totalStats}
         setTotalStats={setTotalStats}
+        yearCondition={yearCondition}
       />
     </div>
   );

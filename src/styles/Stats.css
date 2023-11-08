@@ -10,7 +10,18 @@
   display: flex;
   position: relative;
   flex-wrap: wrap;
-  margin-top: 10vh;
+}
+#statsHeaderContainer {
+  position: relative;
+  height: 6vh;
+  margin-top: 9vh;
+  margin-bottom: 1vh;
+  background-color: red;
+  padding-left: 5vw;
+  padding-right: 5vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .statHeader {
   padding-bottom: 0.2rem;
@@ -53,7 +64,7 @@
   margin-right: 5px;
   position: -webkit-sticky; /* Safari */
   position: sticky;
-  top: 62px;
+  top: 8vh;
 }
 #apartmentStatsHeader {
   background-color: rgb(2, 49, 0);
@@ -98,7 +109,7 @@
   flex-direction: column;
 }
 .apStatsItem {
-  width: 8vw;
+  min-width: 8vw;
   font-size: 0.85rem;
   border-right: solid 1px white;
   text-align: center;
@@ -125,8 +136,8 @@
   color: rgb(252, 255, 54);
 }
 .apStatsItemBody {
-  width: 8vw;
-  font-size: 0.8rem;
+  min-width: 8vw;
+  font-size: 0.75rem;
   border-right: solid 1px black;
   display: flex;
   justify-content: center;
@@ -161,7 +172,7 @@
 }
 .apStatsEarningsItemBody {
   width: 10vw;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   text-align: center;
   display: flex;
   justify-content: center;

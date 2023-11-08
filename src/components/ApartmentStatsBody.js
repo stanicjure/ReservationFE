@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../styles/Stats.css";
 
 const ApartmentStatsBody = (props) => {
-  const { apartments, totalStats, setTotalStats } = props;
+  const { apartments, totalStats, setTotalStats, yearCondition } = props;
 
   const getTotalStats = () => {
     let totalStatsArray = new Array();
@@ -10,20 +10,42 @@ const ApartmentStatsBody = (props) => {
       let adults = 0,
         children = 0,
         reservations = 0,
-        days = 0,
         earnings = 0,
         numberOfDays = 0;
 
       let start,
         end = new Date();
-      ap.reservations.forEach((r) => {
+
+      ap.reservations.forEach((r, index) => {
+        let currentReservationDays = 0;
         start = new Date(r.start);
-        if (end.getDate() === start.getDate()) numberOfDays--; // if next reservation begins when last one ended
+        if (end.getTime() === start.getTime() && r.start !== r.end)
+          currentReservationDays--;
         end = new Date(r.end);
 
-        const currentReservationDays = Math.round(
-          (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24) + 1
-        );
+        const counter = new Date(r.start);
+
+        //if we have year condition
+        if (
+          start.getFullYear() != yearCondition &&
+          end.getFullYear() != yearCondition &&
+          yearCondition !== "alltime"
+        )
+          return;
+
+        /////////////////////
+        while (counter.getTime() <= end.getTime()) {
+          if (
+            counter.getFullYear() == yearCondition &&
+            yearCondition !== "alltime"
+          )
+            currentReservationDays++;
+          else if (yearCondition === "alltime") currentReservationDays++;
+
+          counter.setDate(counter.getDate() + 1);
+        }
+        ////////////////////
+
         earnings += r.price * currentReservationDays;
         numberOfDays += currentReservationDays;
         adults += r.persons;
@@ -38,13 +60,19 @@ const ApartmentStatsBody = (props) => {
           adults: adults,
           children: children,
           reservations: reservations,
-          days: numberOfDays,
+          days: numberOfDays > 0 ? numberOfDays : 0,
           earnings: earnings,
-          guestsA: ((adults + children) / reservations).toFixed(1),
-          adultsA: (adults / reservations).toFixed(1),
-          childrenA: (children / reservations).toFixed(1),
-          daysA: (numberOfDays / reservations).toFixed(1),
-          earningsA: (earnings / numberOfDays).toFixed(1),
+          guestsA:
+            numberOfDays > 0
+              ? ((adults + children) / reservations).toFixed(1)
+              : 0,
+          adultsA: numberOfDays > 0 ? (adults / reservations).toFixed(1) : 0,
+          childrenA:
+            numberOfDays > 0 ? (children / reservations).toFixed(1) : 0,
+          daysA:
+            numberOfDays > 0 ? (numberOfDays / reservations).toFixed(1) : 0,
+          earningsA:
+            numberOfDays > 0 ? (earnings / numberOfDays).toFixed(1) : 0,
         },
       ];
     });
@@ -53,7 +81,7 @@ const ApartmentStatsBody = (props) => {
 
   useEffect(() => {
     getTotalStats();
-  }, [apartments]);
+  }, [apartments, yearCondition]);
 
   return (
     <>
