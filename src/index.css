@@ -142,3 +142,38 @@ li {
   width: 20px;
   margin: 0 5px 2px 2px;
 }
+
+#headerSignout {
+  position: absolute;
+  right: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-radius: 0.35rem;
+}
+#headerSignout:hover {
+  background-color: rgb(0, 27, 146);
+}
+
+.offscreen {
+  position: absolute;
+  left: 10000px;
+}
+.displaySetting {
+  position: absolute;
+  right: 10px;
+  top: 65px;
+  border: solid 1px black;
+  background-color: whitesmoke;
+  color: black;
+  font-size: 0.8rem;
+  padding: 4px;
+  width: 8vw;
+}
+.displaySetting:hover {
+  background-color: rgb(223, 223, 223);
+}
+#logoutBut {
+  color: black;
+}

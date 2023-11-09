@@ -1,9 +1,8 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 
 const StatsHeader = (props) => {
   const { apartments, setYearCondition } = props;
   const [yearDisplay, setYearDisplay] = useState([]);
-  const selectRef = useRef(null);
 
   useEffect(() => {
     const getReservationYears = () => {
@@ -27,11 +26,9 @@ const StatsHeader = (props) => {
         });
       });
       setYearDisplay([...yearsArray]);
-      console.log(selectRef);
     };
 
     getReservationYears();
-    console.log(selectRef);
   }, [apartments]);
 
   const selectHandler = (e) => {
@@ -40,7 +37,7 @@ const StatsHeader = (props) => {
 
   return (
     <div id="statsHeaderContainer">
-      <select onChange={(e) => selectHandler(e)}>
+      <select id="yearSelect" onChange={(e) => selectHandler(e)}>
         <option value="alltime">All Time</option>
         {yearDisplay.map((y) => (
           <option value={y} key={y}>

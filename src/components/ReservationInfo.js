@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../styles/ReservationInfo.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import useAuth from "../hooks/useAuth";
 import {
   faXmark,
   faPenToSquare,
@@ -10,11 +9,14 @@ import {
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import formatDate from "../api/formatDate";
 import deFormatDate from "../api/deFormatDate";
+import useInfoPop from "../hooks/useInfoPop";
 
 const ReservationInfo = (props) => {
   const [dateStartError, setDateStartError] = useState(false); // for start and end date inputs
   const [dateEndError, setDateEndError] = useState(false); // for start and end date inputs
   const axiosPrivate = useAxiosPrivate();
+
+  const [InfoPop, , setVisible, , setInfoTxt, setRefresh] = useInfoPop();
 
   const [isInputDisabled, setIsInputDisabled] = useState([
     true,
@@ -31,11 +33,9 @@ const ReservationInfo = (props) => {
     reservationInfo,
     setReservationInfo,
     apartments,
+    apartmentsChanged,
     setApartmentsChanged,
   } = props;
-
-  // only used to get username for axios
-  const { auth } = useAuth();
 
   const [reservationInfoArrayToDisplay, setReservationInfoArrayToDisplay] = // array of inputs
     useState([
@@ -121,6 +121,7 @@ const ReservationInfo = (props) => {
 
       // changed inputs background to green
       if (response.status === 200) {
+        res._id = responseParsed.reservation._id; // id changes when mutate so we couldnt delete reservation
         if (textareaChanged.background === "rgba(255,175,0,0.12)")
           setTextAreaChanged({ background: "rgba(0,255,0,0.3)" });
         let temp = changed.map((c) => c);
@@ -170,8 +171,6 @@ const ReservationInfo = (props) => {
       { background: "rgb(240, 240, 240)" },
       { background: "rgb(220, 220, 220)" },
     ]);
-
-    console.log(`changed ${changed}`);
 
     return () => {};
   }, []);
@@ -232,6 +231,9 @@ const ReservationInfo = (props) => {
       setApartmentsChanged((prev) => !prev);
       //setEverything(resp.data.newReservations, resp.data.index); // zasto ovo ne radi
       nextPrevResevation(1); // a ovo radi, B T J
+      setInfoTxt("Succesfully deleted");
+      setRefresh(false);
+      setVisible(true);
     } catch (err) {
       console.log(err);
     }
@@ -333,6 +335,7 @@ const ReservationInfo = (props) => {
   return (
     <div className="backgroundBlur">
       <div id="reservationInfoContainer">
+        {InfoPop}
         <div id="reservationInfoHeader">
           <p>Reservation Info</p>
           <button

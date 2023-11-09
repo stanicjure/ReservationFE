@@ -8,6 +8,7 @@ const useInfoPop = (props) => {
   const [visible, setVisible] = useState(false);
   const [item, setItem] = useState("");
   const [infoTxt, setInfoTxt] = useState("");
+  const [refresh, setRefresh] = useState(true);
 
   const InfoPop = (
     <div className="InfoPopContainer" style={visible ? showStyle : hideStyle}>
@@ -21,7 +22,7 @@ const useInfoPop = (props) => {
         onClick={() => {
           setVisible(false);
           setInfoTxt("");
-          window.location.reload(false);
+          if (refresh) window.location.reload(false);
         }}
       >
         Okay
@@ -29,7 +30,7 @@ const useInfoPop = (props) => {
     </div>
   );
 
-  return [InfoPop, visible, setVisible, setItem, setInfoTxt];
+  return [InfoPop, visible, setVisible, setItem, setInfoTxt, setRefresh];
 };
 
 export default useInfoPop;

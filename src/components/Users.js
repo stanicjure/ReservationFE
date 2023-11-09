@@ -130,8 +130,8 @@ const Users = () => {
           {admins?.length ? (
             <ul>
               {admins.map((admin, i) => (
-                <div className="singleUserDisplay">
-                  <li key={i}>{admin}</li>
+                <div key={i} className="singleUserDisplay">
+                  <li>{admin}</li>
                   <FontAwesomeIcon
                     id="remove"
                     className="item"
@@ -171,9 +171,9 @@ const Users = () => {
             <ul>
               {users.map((user, i) => {
                 return (
-                  <>
+                  <div key={`${i + 123}${user}${i}`}>
                     <div className="singleUserDisplay">
-                      <li key={i}>{user}</li>
+                      <li>{user}</li>
                       <FontAwesomeIcon
                         id="remove"
                         className="item"
@@ -204,7 +204,7 @@ const Users = () => {
                         Expiration Date: {`Placeholder`}
                       </div>
                     </div>
-                  </>
+                  </div>
                 );
               })}
             </ul>

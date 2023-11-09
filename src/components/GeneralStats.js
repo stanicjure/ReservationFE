@@ -105,23 +105,23 @@ const GeneralStats = (props) => {
         <div className="statContainer">
           <div className="verticalBorder">
             <p className="statName">Guests</p>
-            <p>{totalStats[0]}</p>
+            <p className="generalContent">{totalStats[0]}</p>
           </div>
           <div className="verticalBorder">
             <p className="statName">Adults</p>
-            <p>{totalStats[1]}</p>
+            <p className="generalContent">{totalStats[1]}</p>
           </div>
           <div className="verticalBorder">
             <p className="statName">Children</p>
-            <p>{totalStats[2]}</p>
+            <p className="generalContent">{totalStats[2]}</p>
           </div>
           <div className="verticalBorder">
             <p className="statName">Reservations</p>
-            <p>{totalStats[3]}</p>
+            <p className="generalContent">{totalStats[3]}</p>
           </div>
           <div className="noBorder">
             <p className="statName">Earnings</p>
-            <p>{totalStats[4]}</p>
+            <p className="generalContent">{totalStats[4]}</p>
           </div>
         </div>
       </div>
@@ -130,24 +130,24 @@ const GeneralStats = (props) => {
         <div className="statContainer">
           <div className="verticalBorder">
             <p className="statName">Guests</p>
-            <p>{averageReservation[0]}</p>
+            <p className="generalContent">{averageReservation[0]}</p>
           </div>
           <div className="verticalBorder">
             <p className="statName">Adults</p>
-            <p>{averageReservation[1]}</p>
+            <p className="generalContent">{averageReservation[1]}</p>
           </div>
           <div className="verticalBorder">
             <p className="statName">Children</p>
-            <p>{averageReservation[2]}</p>
+            <p className="generalContent">{averageReservation[2]}</p>
           </div>
           <div className="verticalBorder">
             <p className="statName">Days</p>
-            <p>{averageReservation[3]}</p>
+            <p className="generalContent">{averageReservation[3]}</p>
           </div>
 
           <div className="noBorder">
             <p className="statName">Earnings</p>
-            <p>{averageReservation[4]}</p>
+            <p className="generalContent">{averageReservation[4]}</p>
           </div>
         </div>
       </div>
@@ -156,28 +156,28 @@ const GeneralStats = (props) => {
         <div className="statContainer">
           <div className="verticalBorder">
             <p className="statName">Guests</p>
-            <p>{averageApartment[0]}</p>
+            <p className="generalContent">{averageApartment[0]}</p>
           </div>
           <div className="verticalBorder">
             <p className="statName">Adults</p>
-            <p>{averageApartment[1]}</p>
+            <p className="generalContent">{averageApartment[1]}</p>
           </div>
           <div className="verticalBorder">
             <p className="statName">Children</p>
-            <p>{averageApartment[2]}</p>
+            <p className="generalContent">{averageApartment[2]}</p>
           </div>
           <div className="verticalBorder">
             <p className="statName">Reservations</p>
-            <p>{averageApartment[3]}</p>
+            <p className="generalContent">{averageApartment[3]}</p>
           </div>
 
           <div className="verticalBorder">
             <p className="statName">Days</p>
-            <p>{averageApartment[4]}</p>
+            <p className="generalContent">{averageApartment[4]}</p>
           </div>
           <div className="noBorder">
             <p className="statName">Earnings</p>
-            <p>{averageApartment[5]}</p>
+            <p className="generalContent">{averageApartment[5]}</p>
           </div>
         </div>
       </div>

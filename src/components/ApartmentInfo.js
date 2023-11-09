@@ -130,7 +130,6 @@ const ApartmentInfo = (props) => {
           const end = new Date(re.end);
           const counter = new Date(yearDisplay, monthDisplay, 1);
           counter.setHours(2);
-          console.log(counter);
           if (
             hovered.getTime() >= start.getTime() &&
             hovered.getTime() <= end.getTime()
@@ -196,6 +195,7 @@ const ApartmentInfo = (props) => {
         const apartmentsArray = response.data.apartments;
         setApartments([...apartmentsArray]);
         setApartmentsNames(apartmentsArray.map((item) => item.label));
+        console.log("EVO GA EVO GA");
       } catch (err) {
         console.error(err);
       }
@@ -379,6 +379,7 @@ const ApartmentInfo = (props) => {
           reservationInfo={reservationInfo}
           setReservationInfo={setReservationInfo}
           apartments={apartments}
+          apartmentsChanged={apartmentsChanged}
           setApartmentsChanged={setApartmentsChanged}
         />
       ) : (

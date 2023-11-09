@@ -6,7 +6,7 @@ import useLocalStorage from "../hooks/useLocalStorage";
 
 const Admin = () => {
   const { auth } = useAuth();
-  const signedUser = useLocalStorage("user", auth.user);
+  const [value] = useLocalStorage("user");
 
   return (
     <div className="adminContainer">
@@ -14,7 +14,7 @@ const Admin = () => {
         <Link to="/">Home</Link>
         <div>
           <p>Admin:</p>
-          {signedUser}
+          {value}
         </div>
       </div>
       <br />

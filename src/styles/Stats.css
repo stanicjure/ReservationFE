@@ -13,15 +13,21 @@
 }
 #statsHeaderContainer {
   position: relative;
-  height: 6vh;
   margin-top: 9vh;
   margin-bottom: 1vh;
-  background-color: red;
   padding-left: 5vw;
   padding-right: 5vw;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+#yearSelect {
+  width: 10rem;
+  font-size: large;
+  text-align: center;
+}
+#yearSelect:focus {
+  outline: 0;
 }
 .statHeader {
   padding-bottom: 0.2rem;
@@ -44,6 +50,9 @@
 .verticalBorder {
   border-right: solid 2px;
   font-size: 0.9rem;
+}
+.generalContent {
+  font-size: 0.8rem;
 }
 .noBorder {
   font-size: 0.9rem;
