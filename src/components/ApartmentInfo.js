@@ -195,7 +195,6 @@ const ApartmentInfo = (props) => {
         const apartmentsArray = response.data.apartments;
         setApartments([...apartmentsArray]);
         setApartmentsNames(apartmentsArray.map((item) => item.label));
-        console.log("EVO GA EVO GA");
       } catch (err) {
         console.error(err);
       }

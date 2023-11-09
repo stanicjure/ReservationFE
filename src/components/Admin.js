@@ -11,7 +11,7 @@ const Admin = () => {
   return (
     <div className="adminContainer">
       <div className="adminHeader">
-        <Link to="/">Home</Link>
+        <Link to="/lounge">Home</Link>
         <div>
           <p>Admin:</p>
           {value}
