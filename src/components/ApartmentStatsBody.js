@@ -2,7 +2,13 @@ import React, { useEffect, useState } from "react";
 import "../styles/Stats.css";
 
 const ApartmentStatsBody = (props) => {
-  const { apartments, totalStats, setTotalStats, yearCondition } = props;
+  const { apartments, totalStats, setTotalStats, yearCondition, lastRowStats } =
+    props;
+
+  let totalsRowStyle =
+    totalStats % 2
+      ? { backgroundColor: "rgba(200,200,200,0.8)" }
+      : { backgroundColor: "rgba(180,180,180,0.8)" };
 
   const getTotalStats = () => {
     let totalStatsArray = new Array();
@@ -142,6 +148,27 @@ const ApartmentStatsBody = (props) => {
             </div>
           );
         })}
+        <div style={totalsRowStyle} id="totalRow">
+          <div className="apStatsApartmentNameBody">Total</div>
+          <div className="apStatsItemBody">
+            {lastRowStats.length != 0 ? lastRowStats[0] : ""}
+          </div>
+          <div className="apStatsItemBody">
+            {lastRowStats.length != 0 ? lastRowStats[1] : ""}
+          </div>
+          <div className="apStatsItemBody">
+            {lastRowStats.length != 0 ? lastRowStats[2] : ""}
+          </div>
+          <div className="apStatsItemBody">
+            {lastRowStats.length != 0 ? lastRowStats[3] : ""}
+          </div>
+          <div className="apStatsItemBody">
+            {lastRowStats.length != 0 ? lastRowStats[4] : ""}
+          </div>
+          <div className="apStatsEarningsItemBody">
+            {lastRowStats.length != 0 ? lastRowStats[5] : ""}
+          </div>
+        </div>
       </div>
     </>
   );

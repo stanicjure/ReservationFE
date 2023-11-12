@@ -25,6 +25,8 @@ export const ResevationForm = (props) => {
   const [persons, setPersons] = useState("");
   const [children, setChildren] = useState("");
   const [additionalInfo, setAdditionalInfo] = useState("");
+  const [advancePay, setAdvancePay] = useState("");
+  const [payed, setPayed] = useState(false);
   const [errMsg, setErrMsg] = useState("");
 
   const [startDateErr, setStartDateErr] = useState("");
@@ -148,6 +150,8 @@ export const ResevationForm = (props) => {
         persons: persons,
         children: children,
         additionalInfo: additionalInfo,
+        advancePay: advancePay,
+        payed: payed,
       });
       if (response.status === 201) {
         setVisible(true);
@@ -157,9 +161,6 @@ export const ResevationForm = (props) => {
     } catch (err) {
       console.log(err);
     }
-  };
-  const onChange = (e) => {
-    setApartmenName(e.target.value);
   };
   return (
     <>
@@ -279,6 +280,38 @@ export const ResevationForm = (props) => {
                       type="number"
                       required
                     ></input>
+                  </label>
+                </div>
+                <div className="formInputs">
+                  <label className="reservationFormLabels" for="">
+                    Advance Pay
+                  </label>
+                  <input
+                    value={advancePay}
+                    onChange={(e) => setAdvancePay(e.target.value)}
+                    className="reservationFormInputs"
+                    type="number"
+                  ></input>{" "}
+                </div>
+                <div
+                  style={
+                    !payed
+                      ? { background: "rgb(170,0,0)" }
+                      : { background: "rgb(0,100,0)" }
+                  }
+                  className="toggleFormInputs"
+                >
+                  <label for="payedCheckbox">
+                    {" "}
+                    Payed
+                    <input
+                      value={payed}
+                      onChange={(e) => {
+                        setPayed((prev) => !prev);
+                      }}
+                      id="payedCheckbox"
+                      type="checkbox"
+                    ></input>{" "}
                   </label>
                 </div>
               </div>

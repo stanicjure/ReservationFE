@@ -26,6 +26,7 @@ const ReservationInfo = (props) => {
     true,
     true,
     true,
+    true,
   ]);
 
   const {
@@ -46,10 +47,14 @@ const ReservationInfo = (props) => {
       "placeholder",
       "placeholder",
       "placeholder",
+      "placeholder",
+      "placeholder",
     ]);
   const [additionalInfo, setAdditionalInfo] = useState("placeholder"); // textarea
 
   const [res, setRes] = useState(reservationInfo.reservation); //clicked reservation
+  const [current, setCurrent] = useState(); // number of reservation
+  const [numberOfReservations, setNumberOfReservations] = useState();
 
   //style for changed input fields
   const [changed, setChanged] = useState([]);
@@ -68,6 +73,8 @@ const ReservationInfo = (props) => {
       res.price,
       res.persons,
       res.children,
+      res.advancePay,
+      res.payed,
     ]);
     setAdditionalInfo(res.additionalInfo);
   };
@@ -117,7 +124,7 @@ const ReservationInfo = (props) => {
         reservation: responseParsed.reservation,
       });
 
-      setIsInputDisabled([true, true, true, true, true, true, true]);
+      setIsInputDisabled([true, true, true, true, true, true, true, true]);
 
       // changed inputs background to green
       if (response.status === 200) {
@@ -190,6 +197,8 @@ const ReservationInfo = (props) => {
       reservation.price,
       reservation.persons,
       reservation.children,
+      reservation.advancePay,
+      reservation.payed,
     ]);
     setReservationInfo({
       label: reservationInfo.label,
@@ -199,7 +208,9 @@ const ReservationInfo = (props) => {
 
     setAdditionalInfo(reservation.additionalInfo);
     setRes(reservation);
-    setIsInputDisabled([true, true, true, true, true, true, true]);
+    setIsInputDisabled([true, true, true, true, true, true, true, true]);
+    setCurrent(index + 1);
+    console.log(reservation.children);
   };
 
   const nextPrevResevation = (nextPrev) => {
@@ -250,6 +261,8 @@ const ReservationInfo = (props) => {
       res.price,
       res.persons,
       res.children,
+      res.advancePay,
+      res.payed,
     ];
     const startingAdditionalInfo = res.additionalInfo;
 
@@ -296,6 +309,7 @@ const ReservationInfo = (props) => {
 
   useEffect(() => {
     // Check validity of dates, if there is an existing reservation
+
     let apartment;
     setDateStartError(false);
     setDateEndError(false);
@@ -308,6 +322,9 @@ const ReservationInfo = (props) => {
     const checkEnd = deFormatDate(reservationInfoArrayToDisplay[3]);
     checkEnd.setHours(2);
     const allReservations = Array.from(apartment.reservations);
+    setNumberOfReservations(allReservations.length);
+    setCurrent(reservationInfo.index + 1); // current reservation number
+
     const filteredReservations = allReservations.filter(
       (r, index) => index !== reservationInfo.index
     );
@@ -500,9 +517,61 @@ const ReservationInfo = (props) => {
                 />
               </button>
             </div>
+            <div style={changed[6]} className="resInfoRight">
+              <p className="resInfoTextRight">Advance Payment:</p>
+              <input
+                type="number"
+                value={reservationInfoArrayToDisplay[7]}
+                onChange={(e) => {
+                  handleInputChange(e, 7);
+                }}
+                disabled={isInputDisabled[7]}
+                className="reservationInfoInputRight"
+              ></input>
+              <button
+                style={!isInputDisabled[7] ? { color: "green" } : {}}
+                onClick={() => handleEdit(7)}
+                className="editButton"
+              >
+                <FontAwesomeIcon
+                  icon={isInputDisabled[7] ? faPenToSquare : faCheck}
+                />
+              </button>
+            </div>
           </div>
 
           <div id="reservationInfoRight">
+            <div
+              style={
+                !reservationInfoArrayToDisplay[8]
+                  ? { background: "rgb(170,0,0)" }
+                  : { background: "rgb(0,100,0)" }
+              }
+              className="resInfoRight"
+            >
+              <p
+                style={{ color: "white", fontWeight: "500" }}
+                className="resInfoTextRight"
+              >
+                Payed
+              </p>
+              <input
+                value={reservationInfoArrayToDisplay[8]}
+                checked={
+                  reservationInfoArrayToDisplay[8]
+                    ? reservationInfoArrayToDisplay[8]
+                    : false
+                }
+                onChange={() => {
+                  let tempArr = Array.from(reservationInfoArrayToDisplay);
+                  tempArr[8] = !tempArr[8];
+                  setReservationInfoArrayToDisplay(tempArr);
+                  console.log(reservationInfoArrayToDisplay[8]);
+                }}
+                className="checkBox"
+                type="checkbox"
+              ></input>
+            </div>
             <textarea
               style={textareaChanged}
               value={additionalInfo}
@@ -527,6 +596,7 @@ const ReservationInfo = (props) => {
           >
             Confirm
           </button>
+          <span>{`${current} / ${numberOfReservations}`}</span>
           <button
             onClick={deleteReservation}
             id="deleteButton"

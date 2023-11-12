@@ -13,7 +13,7 @@ const Stats = () => {
 
   const [apartments, setApartments] = useState([]);
   const [totalStats, setTotalStats] = useState([]);
-  const currentYear = new Date();
+  const [lastRowStats, setLastRowStats] = useState([]); //lol
   const [yearCondition, setYearCondition] = useState("alltime");
 
   useEffect(() => {
@@ -48,7 +48,11 @@ const Stats = () => {
         apartments={apartments}
         setYearCondition={setYearCondition}
       />
-      <GeneralStats apartments={apartments} yearCondition={yearCondition} />
+      <GeneralStats
+        apartments={apartments}
+        yearCondition={yearCondition}
+        setLastRowStats={setLastRowStats}
+      />
       <ApartmentStatsHeader
         totalStats={totalStats}
         setTotalStats={setTotalStats}
@@ -58,6 +62,7 @@ const Stats = () => {
         totalStats={totalStats}
         setTotalStats={setTotalStats}
         yearCondition={yearCondition}
+        lastRowStats={lastRowStats}
       />
     </div>
   );

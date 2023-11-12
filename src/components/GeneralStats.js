@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import "../styles/Stats.css";
 
 const GeneralStats = (props) => {
-  const [totalStats, setTotalStats] = useState([]);
   const [averageReservation, setAverageReservation] = useState([]);
   const [averageApartment, setAverageApartment] = useState([]);
-  const { apartments, yearCondition } = props;
+  const { apartments, yearCondition, setLastRowStats } = props;
 
   const getGeneralStats = () => {
     let guests = 0,
@@ -59,7 +58,6 @@ const GeneralStats = (props) => {
       });
     });
     guests = adults + children;
-    setTotalStats([guests, adults, children, reservations, earnings]);
     const guestsPerReservation = (guests / reservationNumber).toFixed(1);
     const adultsPerReservation = (adults / reservationNumber).toFixed(1);
     const childrenPerReservation = (children / reservationNumber).toFixed(1);
@@ -76,6 +74,14 @@ const GeneralStats = (props) => {
       1
     );
 
+    setLastRowStats([
+      guests,
+      adults,
+      children,
+      earnings,
+      totalNumberOfDays,
+      reservationNumber,
+    ]);
     setAverageReservation([
       guestsPerReservation,
       adultsPerReservation,
@@ -100,31 +106,6 @@ const GeneralStats = (props) => {
 
   return (
     <div className="generalContainer">
-      <div className="table">
-        <div className="statHeader">Total</div>
-        <div className="statContainer">
-          <div className="verticalBorder">
-            <p className="statName">Guests</p>
-            <p className="generalContent">{totalStats[0]}</p>
-          </div>
-          <div className="verticalBorder">
-            <p className="statName">Adults</p>
-            <p className="generalContent">{totalStats[1]}</p>
-          </div>
-          <div className="verticalBorder">
-            <p className="statName">Children</p>
-            <p className="generalContent">{totalStats[2]}</p>
-          </div>
-          <div className="verticalBorder">
-            <p className="statName">Reservations</p>
-            <p className="generalContent">{totalStats[3]}</p>
-          </div>
-          <div className="noBorder">
-            <p className="statName">Earnings</p>
-            <p className="generalContent">{totalStats[4]}</p>
-          </div>
-        </div>
-      </div>
       <div className="table">
         <div className="statHeader">Average (per reservation)</div>
         <div className="statContainer">

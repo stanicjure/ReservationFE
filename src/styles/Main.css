@@ -60,6 +60,12 @@
   cursor: pointer;
   color: white;
 }
+#yearRightButton {
+  margin-left: 8rem;
+}
+#yearLeftButton {
+  margin-right: 8rem;
+}
 #mainBody {
   display: flex;
   flex-direction: row;

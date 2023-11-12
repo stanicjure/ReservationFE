@@ -19,9 +19,6 @@ const UserSettings = (props) => {
 
   return (
     <div className={!isSettingActive ? "offscreen" : "displaySetting"}>
-      <button id="logoutBut" className="noStyleButton" onClick={signOut}>
-        Logout
-      </button>
       {isAdmin ? (
         <Link id="adminLink" to="/admin">
           Admin
@@ -29,6 +26,9 @@ const UserSettings = (props) => {
       ) : (
         ""
       )}
+      <button id="logoutBut" className="noStyleButton" onClick={signOut}>
+        Logout
+      </button>
     </div>
   );
 };

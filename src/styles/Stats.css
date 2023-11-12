@@ -109,7 +109,7 @@
   color: white;
   display: flex;
   flex-direction: column;
-  border-right: solid 4px rgb(255, 255, 255);
+  border-right: solid 2px rgb(255, 255, 255);
 }
 .apStatsAverage {
   width: 38%;
@@ -208,11 +208,19 @@
 .apartmentStatsBig {
   width: 62%;
   display: flex;
-  border-right: solid 4px rgb(255, 255, 255);
+  border-right: solid 2px rgb(0, 0, 0);
 }
 .apartmentStatsSmall {
   width: 38%;
   display: flex;
   border-right: solid 1px black;
   height: 100%;
+}
+#totalRow {
+  border-color: wheat;
+  width: 62%;
+  display: flex;
+  border-right: solid 2px black;
+  border-bottom: solid 2px black;
+  border-top: solid 1px black;
 }

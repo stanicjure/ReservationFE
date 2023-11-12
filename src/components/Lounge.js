@@ -1,6 +1,11 @@
 import "../styles/Main.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretLeft, faCaretRight } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCaretLeft,
+  faCaretRight,
+  faArrowLeft,
+  faArrowRight,
+} from "@fortawesome/free-solid-svg-icons";
 import Header from "./AppHeader";
 import ApartmentInfo from "./ApartmentInfo";
 import { useEffect, useState } from "react";
@@ -34,6 +39,7 @@ const Lounge = () => {
     };
 
     setMonthAndYear();
+    console.log("kurac");
 
     return () => {
       isMounted = false;
@@ -42,18 +48,30 @@ const Lounge = () => {
   }, []);
 
   const handleMonthClick = (x) => {
-    setMonthDisplay((prev) => {
-      if (prev + x > 11) {
-        return 0;
-      } else if (prev + x < 0) {
-        return 11;
-      } else return prev + x;
-    });
+    if (monthDisplay + x > 11) date.setFullYear(yearDisplay + 1, 0);
+    else if (monthDisplay + x < 0) date.setFullYear(yearDisplay - 1, 11);
+    else date.setFullYear(yearDisplay, monthDisplay + x);
+
+    setMonthDisplay(date.getMonth());
+    setYearDisplay(date.getFullYear());
+    console.log(date.getFullYear());
   };
+
+  const handleYearClick = (x) => {
+    setYearDisplay(yearDisplay + x);
+  };
+
   return (
     <div id="appSkelet">
       <Header />
       <span id="yearDisplay">
+        <button
+          onClick={() => handleYearClick(-1)}
+          id="yearLeftButton"
+          className="noStyleButton"
+        >
+          <FontAwesomeIcon icon={faArrowLeft} />
+        </button>
         <button className="noStyleButton" onClick={() => handleMonthClick(-1)}>
           <FontAwesomeIcon icon={faCaretLeft} />
         </button>
@@ -64,6 +82,13 @@ const Lounge = () => {
         </div>
         <button className="noStyleButton" onClick={() => handleMonthClick(1)}>
           <FontAwesomeIcon icon={faCaretRight} />
+        </button>
+        <button
+          onClick={() => handleYearClick(1)}
+          id="yearRightButton"
+          className="noStyleButton"
+        >
+          <FontAwesomeIcon icon={faArrowRight} />
         </button>
       </span>
       <div id="mainBody">
