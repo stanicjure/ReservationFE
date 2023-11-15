@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useLogout from "../hooks/useLogout";
 import { Link } from "react-router-dom";
@@ -15,7 +15,8 @@ const UserSettings = (props) => {
   const { isSettingActive, setIsSettingActive } = props;
   const auth = useAuth();
   const ADMIN = process.env.REACT_APP_ADMIN;
-  const isAdmin = Array.from(auth.auth.roles).find((el) => el == ADMIN);
+  const roles = Array.from(auth.auth.roles);
+  const isAdmin = roles.find((el) => el == ADMIN);
 
   return (
     <div className={!isSettingActive ? "offscreen" : "displaySetting"}>

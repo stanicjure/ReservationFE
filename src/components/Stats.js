@@ -42,29 +42,35 @@ const Stats = () => {
   }, []);
 
   return (
-    <div id="statsContainer">
-      <AppHeader />
-      <StatsHeader
-        apartments={apartments}
-        setYearCondition={setYearCondition}
-      />
-      <GeneralStats
-        apartments={apartments}
-        yearCondition={yearCondition}
-        setLastRowStats={setLastRowStats}
-      />
-      <ApartmentStatsHeader
-        totalStats={totalStats}
-        setTotalStats={setTotalStats}
-      />
-      <ApartmentStatsBody
-        apartments={apartments}
-        totalStats={totalStats}
-        setTotalStats={setTotalStats}
-        yearCondition={yearCondition}
-        lastRowStats={lastRowStats}
-      />
-    </div>
+    <>
+      {true ? (
+        <div id="statsContainer">
+          <AppHeader />
+          <StatsHeader
+            apartments={apartments}
+            setYearCondition={setYearCondition}
+          />
+          <GeneralStats
+            apartments={apartments}
+            yearCondition={yearCondition}
+            setLastRowStats={setLastRowStats}
+          />
+          <ApartmentStatsHeader
+            totalStats={totalStats}
+            setTotalStats={setTotalStats}
+          />
+          <ApartmentStatsBody
+            apartments={apartments}
+            totalStats={totalStats}
+            setTotalStats={setTotalStats}
+            yearCondition={yearCondition}
+            lastRowStats={lastRowStats}
+          />
+        </div>
+      ) : (
+        "Loading"
+      )}
+    </>
   );
 };
 

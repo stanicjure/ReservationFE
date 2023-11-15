@@ -283,9 +283,7 @@ export const ResevationForm = (props) => {
                   </label>
                 </div>
                 <div className="formInputs">
-                  <label className="reservationFormLabels" for="">
-                    Advance Pay
-                  </label>
+                  <label className="reservationFormLabels">Advance Pay</label>
                   <input
                     value={advancePay}
                     onChange={(e) => setAdvancePay(e.target.value)}

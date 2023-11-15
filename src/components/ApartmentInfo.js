@@ -66,9 +66,11 @@ const ApartmentInfo = (props) => {
             currentDate.getTime() >= start.getTime() &&
             currentDate.getTime() <= end.getTime() &&
             currentDate.getTime() !== end2.getTime()
-          )
-            boxStyle = "greenBox";
-          else if (
+          ) {
+            if (re?.payed) boxStyle = "tealBox";
+            else if (!re?.payed && re?.advancePay > 0) boxStyle = "greenBox";
+            else boxStyle = "orangeBox";
+          } else if (
             start.getTime() === end2.getTime() &&
             currentDate.getTime() === start.getTime()
           )
@@ -207,6 +209,10 @@ const ApartmentInfo = (props) => {
       controller.abort();
     };
   }, [apartmentsChanged]); // if we change reservation in ReservationInfo.js we wanna get apartments again from database
+
+  useEffect(() => {
+    console.log(highligtedElements);
+  }, [monthDisplay, yearDisplay]);
 
   const addApartment = async (apName) => {
     try {

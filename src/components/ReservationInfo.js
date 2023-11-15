@@ -29,6 +29,8 @@ const ReservationInfo = (props) => {
     true,
   ]);
 
+  const inputRef = useRef([]);
+
   const {
     setIsReservationInfoVisible,
     reservationInfo,
@@ -39,18 +41,8 @@ const ReservationInfo = (props) => {
   } = props;
 
   const [reservationInfoArrayToDisplay, setReservationInfoArrayToDisplay] = // array of inputs
-    useState([
-      "placeholder",
-      "placeholder",
-      "placeholder",
-      "placeholder",
-      "placeholder",
-      "placeholder",
-      "placeholder",
-      "placeholder",
-      "placeholder",
-    ]);
-  const [additionalInfo, setAdditionalInfo] = useState("placeholder"); // textarea
+    useState(["", "", "", "", 0, 0, 0, 0, false]);
+  const [additionalInfo, setAdditionalInfo] = useState(""); // textarea
 
   const [res, setRes] = useState(reservationInfo.reservation); //clicked reservation
   const [current, setCurrent] = useState(); // number of reservation
@@ -112,6 +104,8 @@ const ReservationInfo = (props) => {
         children: reservationInfoArrayToDisplay[6],
         arrive: startDate,
         leave: endDate,
+        advancePay: reservationInfoArrayToDisplay[7],
+        payed: reservationInfoArrayToDisplay[8],
         additionalInfo: additionalInfo,
         reservationIndex: reservationInfo.index,
       });
@@ -123,6 +117,7 @@ const ReservationInfo = (props) => {
         index: responseParsed.index,
         reservation: responseParsed.reservation,
       });
+      setRes(responseParsed.reservation);
 
       setIsInputDisabled([true, true, true, true, true, true, true, true]);
 
@@ -150,17 +145,14 @@ const ReservationInfo = (props) => {
   };
 
   const handleEdit = (index) => {
-    let counter = 0;
-    const temp = isInputDisabled.map((x) => {
-      if (counter === index) {
-        counter++;
-        return !x;
-      } else {
-        counter++;
-        return true;
-      }
+    inputRef?.current?.forEach((el, i) => {
+      if (i == index - 1) {
+        el.disabled = !el.disabled;
+        el.focus();
+      } else el.disabled = true;
+      const temp = inputRef?.current?.map((t) => t?.disabled);
+      setIsInputDisabled([0, ...temp]);
     });
-    setIsInputDisabled(temp);
   };
 
   const exitReservationInfo = () => {
@@ -179,6 +171,7 @@ const ReservationInfo = (props) => {
       { background: "rgb(220, 220, 220)" },
     ]);
 
+    inputRef?.current?.forEach((el) => (el.disabled = true));
     return () => {};
   }, []);
 
@@ -380,12 +373,12 @@ const ReservationInfo = (props) => {
             <div style={changed[0]} className="resInfo">
               <p className="resInfoText">Name</p>
               <input
+                ref={(el) => (inputRef.current[0] = el)}
                 type="text"
                 value={reservationInfoArrayToDisplay[1]}
                 onChange={(e) => {
                   handleInputChange(e, 1);
                 }}
-                disabled={isInputDisabled[1]}
                 className="reservationInfoInput"
               ></input>
               <button
@@ -401,12 +394,12 @@ const ReservationInfo = (props) => {
             <div style={changed[1]} className="resInfo">
               <p className="resInfoText">Arrive</p>
               <input
+                ref={(el) => (inputRef.current[1] = el)}
                 type="date"
                 value={reservationInfoArrayToDisplay[2]}
                 onChange={(e) => {
                   handleInputChange(e, 2);
                 }}
-                disabled={isInputDisabled[2]}
                 className="reservationInfoInputDate"
               ></input>
               {dateStartError ? (
@@ -429,12 +422,12 @@ const ReservationInfo = (props) => {
             <div style={changed[2]} className="resInfo">
               <p className="resInfoText">Leave</p>
               <input
+                ref={(el) => (inputRef.current[2] = el)}
                 type="date"
                 value={reservationInfoArrayToDisplay[3]}
                 onChange={(e) => {
                   handleInputChange(e, 3);
                 }}
-                disabled={isInputDisabled[3]}
                 className="reservationInfoInputDate"
               ></input>
               {dateEndError ? (
@@ -457,12 +450,12 @@ const ReservationInfo = (props) => {
             <div style={changed[3]} className="resInfo">
               <p className="resInfoText">Price</p>
               <input
+                ref={(el) => (inputRef.current[3] = el)}
                 type="number"
                 value={reservationInfoArrayToDisplay[4]}
                 onChange={(e) => {
                   handleInputChange(e, 4);
                 }}
-                disabled={isInputDisabled[4]}
                 className="reservationInfoInput"
               ></input>
               <button
@@ -478,12 +471,12 @@ const ReservationInfo = (props) => {
             <div style={changed[4]} className="resInfo">
               <p className="resInfoText">Persons</p>
               <input
+                ref={(el) => (inputRef.current[4] = el)}
                 type="number"
                 value={reservationInfoArrayToDisplay[5]}
                 onChange={(e) => {
                   handleInputChange(e, 5);
                 }}
-                disabled={isInputDisabled[5]}
                 className="reservationInfoInput"
               ></input>
               <button
@@ -499,16 +492,18 @@ const ReservationInfo = (props) => {
             <div style={changed[5]} className="resInfo">
               <p className="resInfoText">Children</p>
               <input
+                ref={(el) => (inputRef.current[5] = el)}
                 type="number"
                 value={reservationInfoArrayToDisplay[6]}
                 onChange={(e) => {
                   handleInputChange(e, 6);
                 }}
-                disabled={isInputDisabled[6]}
                 className="reservationInfoInput"
               ></input>
               <button
-                style={!isInputDisabled[6] ? { color: "green" } : {}}
+                style={
+                  !inputRef?.current[5]?.disabled ? { color: "green" } : {}
+                }
                 onClick={() => handleEdit(6)}
                 className="editButton"
               >
@@ -520,12 +515,12 @@ const ReservationInfo = (props) => {
             <div style={changed[6]} className="resInfoRight">
               <p className="resInfoTextRight">Advance Payment:</p>
               <input
+                ref={(el) => (inputRef.current[6] = el)}
                 type="number"
                 value={reservationInfoArrayToDisplay[7]}
                 onChange={(e) => {
                   handleInputChange(e, 7);
                 }}
-                disabled={isInputDisabled[7]}
                 className="reservationInfoInputRight"
               ></input>
               <button
@@ -543,9 +538,11 @@ const ReservationInfo = (props) => {
           <div id="reservationInfoRight">
             <div
               style={
-                !reservationInfoArrayToDisplay[8]
-                  ? { background: "rgb(170,0,0)" }
-                  : { background: "rgb(0,100,0)" }
+                changed[7]?.background === "rgba(255,175,0,0.27)"
+                  ? { background: "rgba(225,175,0,0.85)" }
+                  : !reservationInfoArrayToDisplay[8]
+                  ? { background: "rgb(170,0,0)", color: "white" }
+                  : { background: "rgb(0,100,0)", color: "white" }
               }
               className="resInfoRight"
             >
