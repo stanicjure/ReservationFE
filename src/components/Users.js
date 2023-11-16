@@ -200,9 +200,7 @@ const Users = () => {
                           );
                         }}
                       />
-                      <div className="item">
-                        Expiration Date: {`Placeholder`}
-                      </div>
+                      <div className="item">Placeholder: {`Placeholder`}</div>
                     </div>
                   </div>
                 );

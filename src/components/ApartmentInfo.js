@@ -10,6 +10,7 @@ import { AddDeleteApartment } from "./AddDeleteApartment";
 import { ConfirmAction } from "./ConfirmAction";
 import ReservationInfo from "./ReservationInfo";
 import useInfoPop from "../hooks/useInfoPop";
+import Search from "./Search";
 
 //REMEMBER TO DISABLE SCROLLING WHEN INFO POPS UP!!! actually no need i think position is fixed anyway we gonna disable everything else
 //NO NEED FOR APARTMENTSNAMES
@@ -209,10 +210,6 @@ const ApartmentInfo = (props) => {
       controller.abort();
     };
   }, [apartmentsChanged]); // if we change reservation in ReservationInfo.js we wanna get apartments again from database
-
-  useEffect(() => {
-    console.log(highligtedElements);
-  }, [monthDisplay, yearDisplay]);
 
   const addApartment = async (apName) => {
     try {
@@ -456,18 +453,7 @@ const ApartmentInfo = (props) => {
                 <FontAwesomeIcon icon={faPlus} />
               </span>
             </button>
-            <button id="deleteApartmentButton" className="noStyleButton">
-              <span className="spanTab">
-                <p className="tab">Delete Apartment</p>
-                <FontAwesomeIcon icon={faXmark} />
-              </span>
-            </button>
-            <button id="deleteReservationButton" className="noStyleButton">
-              <span className="spanTab">
-                <p className="tab">Delete Existing Reservation</p>
-                <FontAwesomeIcon icon={faXmark} />
-              </span>
-            </button>
+            <Search apartments={apartments} />
           </div>
 
           <ul>{boxes}</ul>

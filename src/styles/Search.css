@@ -1,0 +1,18 @@
+#searchContainer {
+  display: flex;
+  align-items: center;
+  color: white;
+  height: 100%;
+}
+#searchParagraph {
+  margin-left: 4px;
+  margin-right: 4px;
+  font-size: large;
+}
+#searchParagraph:hover {
+  cursor: default;
+}
+#searchInput {
+  height: 50%;
+  border-radius: 0px;
+}
