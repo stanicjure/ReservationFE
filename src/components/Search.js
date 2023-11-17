@@ -12,44 +12,67 @@ const Search = (props) => {
   const [namesArray, setNamesArray] = useState([]);
 
   const handleOutsideClick = () => {
-    console.log("outsideClick");
+    setSearchValue("");
+    setSuggestionsArray([]);
   };
 
   const containerRef = useOutsideClick(handleOutsideClick);
 
   const handleSearch = () => {
+    console.log("setting empty");
     setSuggestionsArray([]);
     const searchValueArray = Array.from(searchValue.toLowerCase());
-    namesArray.forEach((el) => {
-      const currentStringArray = Array.from(el.name);
-      const currentApartmentName = el.label;
 
-      if (searchValueArray.length > 1)
-        currentStringArray.forEach((current, index) => {
-          if (
-            current === searchValueArray[0] &&
-            currentStringArray[index + 1] === searchValueArray[1]
-          ) {
-            let weightFactor = 0;
-            let searchIndex = 2;
-            for (let i = index + 2; i < currentStringArray.length; i++) {
-              if (currentStringArray[i] === searchValue[searchIndex]) {
-                weightFactor++;
-                searchIndex++;
-              }
+    let temp = new Array();
+
+    namesArray.forEach((el, index) => {
+      const currentStringArray = Array.from(el.name);
+      if (currentStringArray.length < 1) return;
+      const currentApartmentName = el.label;
+      let weightFactor = 0;
+
+      if (searchValueArray.length > 1) {
+        currentStringArray.forEach((csa, csaIndex) => {
+          // let trueArray = Array.apply(null, Array(searchValueArray.length)).map(
+          //   (m) => false
+          // );
+          searchValueArray.forEach((sva, svaIndex) => {
+            if (sva == currentStringArray[csaIndex + svaIndex]) {
+              weightFactor++;
+            } else {
+              weightFactor = 0;
+              return;
             }
 
-            let temp = [
-              ...suggestionsArray,
-              {
-                label: currentApartmentName,
-                weight: weightFactor,
-                name: el.name,
-              },
-            ];
-            setSuggestionsArray([...temp]);
-          }
+            if (weightFactor == searchValueArray.length) {
+              temp = [
+                ...temp,
+                {
+                  index: index,
+                  label: currentApartmentName,
+                  weight: weightFactor,
+                  name: el.name,
+                },
+              ];
+            }
+          });
+
+          setSuggestionsArray([...temp]);
+
+          // suggestionsArray.length < 1
+          //   ? setSuggestionsArray([...temp])
+          //   : suggestionsArray.forEach((sa, indx) => {
+          //       if (sa.index === index) {
+          //         if (sa.weight < weightFactor) {
+          //           setSuggestionsArray([...temp]);
+          //           console.log(temp);
+          //         } else return;
+          //       } else {
+          //         setSuggestionsArray([...temp]);
+          //       }
+          //     });
         });
+      }
     });
   };
 
@@ -62,6 +85,8 @@ const Search = (props) => {
       });
       setNamesArray([...temp]);
     });
+
+    console.log(namesArray);
   }, [apartments]);
 
   useEffect(() => {
@@ -73,14 +98,26 @@ const Search = (props) => {
   }, [suggestionsArray]);
   return (
     <div ref={containerRef} id="searchContainer">
-      <FontAwesomeIcon icon={faMagnifyingGlass} />
-      <p id="searchParagraph">Search</p>
+      <div id="searchTextIcon">
+        <p id="searchParagraph">Search</p>
+      </div>
+
       <input
+        autoComplete="off"
         type="text"
         value={searchValue}
         onChange={(e) => setSearchValue(e.target.value)}
         id="searchInput"
       ></input>
+      <div id="suggestionDisplay">
+        {suggestionsArray.map((sa, index) => {
+          return (
+            <div className="searchItem" key={`${index + 1}${sa}${index + 477}`}>
+              {sa.name}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };

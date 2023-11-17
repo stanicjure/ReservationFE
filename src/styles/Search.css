@@ -1,18 +1,41 @@
 #searchContainer {
+  position: relative;
   display: flex;
   align-items: center;
   color: white;
   height: 100%;
 }
+#searchTextIcon {
+  display: flex;
+  width: 30%;
+  justify-content: flex-end;
+}
 #searchParagraph {
   margin-left: 4px;
   margin-right: 4px;
   font-size: large;
+  font-weight: 600;
 }
 #searchParagraph:hover {
   cursor: default;
 }
 #searchInput {
   height: 50%;
+  width: 70%;
   border-radius: 0px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+#suggestionDisplay {
+  position: absolute;
+  left: 32%;
+  top: 45px;
+  width: 68%;
+  background-color: rgb(23, 0, 151);
+  z-index: 3;
+}
+.searchItem {
+  background-color: rgb(255, 255, 255);
+  color: black;
+  margin: 1px;
 }
