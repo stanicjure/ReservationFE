@@ -453,7 +453,13 @@ const ApartmentInfo = (props) => {
                 <FontAwesomeIcon icon={faPlus} />
               </span>
             </button>
-            <Search apartments={apartments} />
+            <Search
+              apartmentsChanged={apartmentsChanged}
+              setApartmentsChanged={setApartmentsChanged}
+              apartments={apartments}
+              setIsReservationInfoVisible={setIsReservationInfoVisible}
+              setReservationInfo={setReservationInfo}
+            />
           </div>
 
           <ul>{boxes}</ul>

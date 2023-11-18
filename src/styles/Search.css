@@ -31,11 +31,16 @@
   left: 32%;
   top: 45px;
   width: 68%;
-  background-color: rgb(23, 0, 151);
+  background-color: rgb(12, 0, 117);
   z-index: 3;
 }
 .searchItem {
   background-color: rgb(255, 255, 255);
   color: black;
   margin: 1px;
+  font-size: 0.85rem;
+  cursor: default;
+}
+.searchItem:hover {
+  background-color: rgb(177, 227, 250);
 }
