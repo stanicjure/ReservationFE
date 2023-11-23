@@ -25,6 +25,7 @@ const ApartmentInfo = (props) => {
   const [addApartmentActive, setAddApartmentActive] = useState(false);
   const [apartments, setApartments] = useState([]);
   const [apartmentsChanged, setApartmentsChanged] = useState(false); // will be used to detect changes made in reservationsInfo
+  const [allFoundItemsArray, setAllFoundItemsArray] = useState([]); // for Search.js and ReservationInfo.js to share
 
   // for highlighting hovered reservation
   const boxRef = useRef({});
@@ -383,6 +384,8 @@ const ApartmentInfo = (props) => {
           apartments={apartments}
           apartmentsChanged={apartmentsChanged}
           setApartmentsChanged={setApartmentsChanged}
+          allFoundItemsArray={allFoundItemsArray}
+          setAllFoundItemsArray={setAllFoundItemsArray}
         />
       ) : (
         ""
@@ -459,6 +462,8 @@ const ApartmentInfo = (props) => {
               apartments={apartments}
               setIsReservationInfoVisible={setIsReservationInfoVisible}
               setReservationInfo={setReservationInfo}
+              allFoundItemsArray={allFoundItemsArray}
+              setAllFoundItemsArray={setAllFoundItemsArray}
             />
           </div>
 

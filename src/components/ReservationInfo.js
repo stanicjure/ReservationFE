@@ -38,6 +38,8 @@ const ReservationInfo = (props) => {
     apartments,
     apartmentsChanged,
     setApartmentsChanged,
+    allFoundItemsArray,
+    setAllFoundItemsArray,
   } = props;
 
   const [reservationInfoArrayToDisplay, setReservationInfoArrayToDisplay] = // array of inputs
@@ -157,6 +159,7 @@ const ReservationInfo = (props) => {
 
   const exitReservationInfo = () => {
     setIsReservationInfoVisible(false); //lol
+    setAllFoundItemsArray([]); // this array is formed on item click when we use search bar.
   };
 
   useEffect(() => {
@@ -183,7 +186,7 @@ const ReservationInfo = (props) => {
       reservation.end
     );
     setReservationInfoArrayToDisplay([
-      reservationInfo.label,
+      !reservation.apName ? reservationInfo.label : reservation.apName, // .apname exists if we used searchbar, then all apartment names wont be the same
       reservation.guestName,
       startFormated,
       endFormated,
@@ -207,22 +210,39 @@ const ReservationInfo = (props) => {
   };
 
   const nextPrevResevation = (nextPrev) => {
-    apartments.forEach((ap) => {
-      if (ap.label === reservationInfo.label) {
-        const reservations = Array.from(ap.reservations);
-        let index;
-        if (
-          reservationInfo.index + nextPrev < reservations.length &&
-          reservationInfo.index + nextPrev > 0
-        )
-          index = reservationInfo.index + nextPrev;
-        else if (reservationInfo.index + nextPrev < 0)
-          index = reservations.length - 1;
-        else index = 0;
+    if (allFoundItemsArray.length === 0) {
+      // so if we didnt use search bar, but we clicked a reservation
+      apartments.forEach((ap) => {
+        // optimize this, we dont wanna search apartments everytime we click, we can get apartment on click and just search reservations
+        if (ap.label === reservationInfo.label) {
+          const reservations = Array.from(ap.reservations);
+          let index;
+          if (
+            reservationInfo.index + nextPrev < reservations.length &&
+            reservationInfo.index + nextPrev > 0
+          )
+            index = reservationInfo.index + nextPrev;
+          else if (reservationInfo.index + nextPrev < 0)
+            index = reservations.length - 1;
+          else index = 0;
 
-        setEverything(reservations, index);
-      }
-    });
+          setEverything(reservations, index);
+        }
+      });
+    } else {
+      // if we used a search bar
+      const reservations = Array.from(allFoundItemsArray);
+      let index;
+      if (
+        reservationInfo.index + nextPrev < reservations.length &&
+        reservationInfo.index + nextPrev > 0
+      )
+        index = reservationInfo.index + nextPrev;
+      else if (reservationInfo.index + nextPrev < 0)
+        index = reservations.length - 1;
+      else index = 0;
+      setEverything(reservations, index);
+    }
   };
 
   const deleteReservation = async () => {
@@ -292,7 +312,6 @@ const ReservationInfo = (props) => {
       }
       setChanged(temp);
     });
-    return () => {};
   }, [
     reservationInfoArrayToDisplay,
     additionalInfo,
@@ -315,8 +334,14 @@ const ReservationInfo = (props) => {
     const checkEnd = deFormatDate(reservationInfoArrayToDisplay[3]);
     checkEnd.setHours(2);
     const allReservations = Array.from(apartment.reservations);
-    setNumberOfReservations(allReservations.length);
-    setCurrent(reservationInfo.index + 1); // current reservation number
+
+    allFoundItemsArray.length !== 0
+      ? setNumberOfReservations(allFoundItemsArray.length)
+      : setNumberOfReservations(allReservations.length);
+
+    allFoundItemsArray.length !== 0
+      ? setCurrent(reservationInfo.index + 1)
+      : setCurrent(reservationInfo.index + 1); // current reservation number
 
     const filteredReservations = allReservations.filter(
       (r, index) => index !== reservationInfo.index

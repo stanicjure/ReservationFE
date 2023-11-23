@@ -9,9 +9,9 @@ const Search = (props) => {
   const {
     setIsReservationInfoVisible,
     apartments,
-    apartmentsChanged,
-    setApartmentsChanged,
     setReservationInfo,
+    allFoundItemsArray,
+    setAllFoundItemsArray,
   } = props;
   const [searchValue, setSearchValue] = useState("");
   const [suggestionsArray, setSuggestionsArray] = useState([]);
@@ -90,22 +90,43 @@ const Search = (props) => {
     });
   };
 
+  //cleanup
   const findReservations = () => {};
 
   const handleItemClick = (item) => {
-    setReservationInfo({ label: item.apName, index: 0, reservation: item });
+    // only now create array of found items (duplicates + clicked item)
+    // sort it also
+    let temp = new Array();
+    temp = [item, ...duplicateArray];
+    temp.sort((a, b) => {
+      if (a.apName === b.apName)
+        if (a.index > b.index) {
+          return -1;
+        } else if (a.index < b.index) {
+          return 1;
+        } else return 0;
+    });
+    setAllFoundItemsArray([...temp]);
+    //
+    setReservationInfo({
+      label: item.apName,
+      index: 0,
+      reservation: item,
+    });
+
     setSearchValue("");
     setSuggestionsArray([]);
     setIsReservationInfoVisible(true);
-    console.log(item);
+    console.log(allFoundItemsArray[0]);
   };
 
   useEffect(() => {
     let temp = new Array();
     apartments.forEach((ap) => {
       const res = Array.from(ap.reservations);
-      res.forEach((r) => {
+      res.forEach((r, index) => {
         r.apName = ap.label;
+        r.index = index;
         temp = [...temp, r];
       });
       setReservations([...temp]);
