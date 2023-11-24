@@ -96,28 +96,31 @@ const Search = (props) => {
   const handleItemClick = (item) => {
     // only now create array of found items (duplicates + clicked item)
     // sort it also
+
+    if (duplicateArray.length === 0) {
+      setAllFoundItemsArray([item]);
+      return;
+    }
+
+    // if there is only one name then there can be duplicate array composed from other names
+    if (item.guestName !== duplicateArray[0].guestName) {
+      setAllFoundItemsArray([item]);
+      return;
+    }
+
     let temp = new Array();
     temp = [item, ...duplicateArray];
     temp.sort((a, b) => {
-      if (a.apName === b.apName)
-        if (a.index > b.index) {
-          return -1;
-        } else if (a.index < b.index) {
-          return 1;
-        } else return 0;
+      const start = new Date(a.start);
+      const end = new Date(a.end);
+      if (start.getTime() > end.getTime()) {
+        return 1;
+      } else if (start.getTime() < end.getTime()) {
+        return -1;
+      } else return 0;
     });
     setAllFoundItemsArray([...temp]);
     //
-    setReservationInfo({
-      label: item.apName,
-      index: 0,
-      reservation: item,
-    });
-
-    setSearchValue("");
-    setSuggestionsArray([]);
-    setIsReservationInfoVisible(true);
-    console.log(allFoundItemsArray[0]);
   };
 
   useEffect(() => {
@@ -138,8 +141,17 @@ const Search = (props) => {
   }, [searchValue]);
 
   useEffect(() => {
-    console.log(suggestionsArray);
-  }, [suggestionsArray]);
+    if (allFoundItemsArray.length === 0) return;
+    setReservationInfo({
+      label: allFoundItemsArray[0].apName,
+      index: 0,
+      reservation: allFoundItemsArray[0],
+    });
+
+    setSearchValue("");
+    setSuggestionsArray([]);
+    setIsReservationInfoVisible(true);
+  }, [allFoundItemsArray]);
   return (
     <>
       <div id="reservationInfoStyleCorrection"></div>

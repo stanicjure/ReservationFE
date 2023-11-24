@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import Users from "./Users";
+import UsersRequest from "./UsersRequest";
 import "../styles/Admin.css";
 import useAuth from "../hooks/useAuth";
 import useLocalStorage from "../hooks/useLocalStorage";
@@ -20,6 +21,8 @@ const Admin = () => {
       <br />
       <Users />
       <br />
+      <UsersRequest />
+
       <div className="flexGrow"></div>
     </div>
   );

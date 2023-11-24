@@ -30,6 +30,11 @@ const Lounge = () => {
   const [monthDisplay, setMonthDisplay] = useState();
   const [yearDisplay, setYearDisplay] = useState();
 
+  // for highlighting boxes in ApartmentInfo.js
+  const [highligtedElements, setHighlitedElements] = useState([]);
+  const [highlightedReservationVisual, setHighlightedReservationVisual] =
+    useState([]);
+
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
@@ -54,7 +59,6 @@ const Lounge = () => {
 
     setMonthDisplay(date.getMonth());
     setYearDisplay(date.getFullYear());
-    console.log(date.getFullYear());
   };
 
   const handleYearClick = (x) => {
@@ -96,6 +100,10 @@ const Lounge = () => {
           yearDisplay={yearDisplay}
           date={date}
           monthDisplay={monthDisplay}
+          highligtedElements={highligtedElements}
+          highlightedReservationVisual={highlightedReservationVisual}
+          setHighlitedElements={setHighlitedElements}
+          setHighlightedReservationVisual={setHighlightedReservationVisual}
         />
       </div>
     </div>

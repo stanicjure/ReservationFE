@@ -17,7 +17,14 @@ import Search from "./Search";
 const ApartmentInfo = (props) => {
   const [apartmentsNames, setApartmentsNames] = useState([]);
   const [date, getNumberOfDaysInMonth] = useDate();
-  const { monthDisplay, yearDisplay } = props;
+  const {
+    monthDisplay,
+    yearDisplay,
+    highligtedElements,
+    highlightedReservationVisual,
+    setHighlitedElements,
+    setHighlightedReservationVisual,
+  } = props;
   const { auth } = useAuth();
   const signedUser = useLocalStorage("user", auth.user);
   const axiosPrivate = useAxiosPrivate();
@@ -30,9 +37,6 @@ const ApartmentInfo = (props) => {
   // for highlighting hovered reservation
   const boxRef = useRef({});
   const visualReservationRef = useRef({});
-  const [highligtedElements, setHighlitedElements] = useState([]);
-  const [highlightedReservationVisual, setHighlightedReservationVisual] =
-    useState([]);
 
   const boxesArray = Array.from(
     Array(getNumberOfDaysInMonth(monthDisplay)).keys()
@@ -160,7 +164,6 @@ const ApartmentInfo = (props) => {
       }
     });
 
-    // make it a class instead of making values like this. it will solve that crappy bug i have a hunch lul
     if (arrayToHighlight) {
       setHighlitedElements(
         arrayToHighlight.map((ar) => {

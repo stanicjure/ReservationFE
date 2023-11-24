@@ -206,7 +206,6 @@ const ReservationInfo = (props) => {
     setRes(reservation);
     setIsInputDisabled([true, true, true, true, true, true, true, true]);
     setCurrent(index + 1);
-    console.log(reservation.children);
   };
 
   const nextPrevResevation = (nextPrev) => {
@@ -339,13 +338,17 @@ const ReservationInfo = (props) => {
       ? setNumberOfReservations(allFoundItemsArray.length)
       : setNumberOfReservations(allReservations.length);
 
-    allFoundItemsArray.length !== 0
-      ? setCurrent(reservationInfo.index + 1)
-      : setCurrent(reservationInfo.index + 1); // current reservation number
+    setCurrent(reservationInfo.index + 1); // current reservation number
 
-    const filteredReservations = allReservations.filter(
-      (r, index) => index !== reservationInfo.index
-    );
+    let filteredReservations;
+
+    allFoundItemsArray.length === 0
+      ? (filteredReservations = allReservations.filter(
+          (r, index) => index !== reservationInfo.index
+        ))
+      : (filteredReservations = allReservations.filter(
+          (r, index) => index !== reservationInfo.reservation.index
+        ));
 
     if (checkStart.getTime() > checkEnd.getTime()) {
       setDateStartError(true);
@@ -366,6 +369,10 @@ const ReservationInfo = (props) => {
         setDateEndError(true);
     });
   }, [reservationInfoArrayToDisplay[2], reservationInfoArrayToDisplay[3]]);
+
+  useEffect(() => {
+    console.log(reservationInfo);
+  }, [reservationInfo]);
 
   return (
     <div className="backgroundBlur">
