@@ -1,44 +1,50 @@
 import React, { useEffect, useState } from "react";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import "../styles/UserRequest.css";
 
-const UsersRequest = () => {
-  const [requests, setRequests] = useState([]);
+const UsersRequest = (props) => {
+  const { userRequestArray, setUserRequestArray } = props;
+  const axiosPrivate = useAxiosPrivate();
 
-  useEffect(() => {
-    const getRequests = () => {
-      //api call
-      setRequests(["Jure", "Smecar", "Konjokradica", "Saladin", "Kornjaca"]);
-    };
-
-    getRequests();
-  }, []);
-
-  const handleAccept = () => {
-    //after successful api call
+  const handleAccept = async (id) => {
+    const response = await axiosPrivate.patch(`/users/${id}`);
+    if (response.status === 200) {
+      console.log(response);
+    } else {
+      console.log(response);
+    }
   };
 
-  const handleReject = (item) => {
-    // after successful api call
-    let temp = new Array();
-    temp = requests.filter((r) => r !== item);
-    setRequests([...temp]);
+  const handleReject = async (id) => {
+    const response = await axiosPrivate.delete(`/users/${id}`);
+    if (response.status === 204) {
+      console.log(response);
+    } else {
+      console.log(response);
+    }
   };
 
   return (
     <div id="URContainer">
       <h3>User Requests</h3>
       <div id="URContent">
-        {requests.length === 0 ? (
+        {userRequestArray.length === 0 ? (
           <p>No requests</p>
         ) : (
-          requests.map((r) => {
+          userRequestArray.map((user) => {
             return (
-              <div className="URItem">
-                {r}{" "}
-                <button onClick={() => handleAccept(r)} id="URAccept">
+              <div key={user.username} className="URItem">
+                {user.username}{" "}
+                <button
+                  onClick={() => handleAccept(user.username)}
+                  id="URAccept"
+                >
                   Accept
                 </button>
-                <button onClick={() => handleReject(r)} id="URReject">
+                <button
+                  onClick={() => handleReject(user.username)}
+                  id="URReject"
+                >
                   Reject
                 </button>
               </div>

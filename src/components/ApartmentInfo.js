@@ -195,7 +195,7 @@ const ApartmentInfo = (props) => {
 
     const getApartments = async () => {
       try {
-        const id = "Jure"; //auth.user
+        const id = auth.user;
         const response = await axiosPrivate.get(`/users/${id}`, {
           signal: controller.signal,
         });

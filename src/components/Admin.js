@@ -4,10 +4,11 @@ import UsersRequest from "./UsersRequest";
 import "../styles/Admin.css";
 import useAuth from "../hooks/useAuth";
 import useLocalStorage from "../hooks/useLocalStorage";
+import { useState } from "react";
 
 const Admin = () => {
   const { auth } = useAuth();
-  const [value] = useLocalStorage("user");
+  const [userRequestArray, setUserRequestArray] = useState([]);
 
   return (
     <div className="adminContainer">
@@ -15,13 +16,16 @@ const Admin = () => {
         <Link to="/lounge">Home</Link>
         <div>
           <p>Admin:</p>
-          {value}
+          {auth.user}
         </div>
       </div>
       <br />
-      <Users />
+      <Users setUserRequestArray={setUserRequestArray} />
       <br />
-      <UsersRequest />
+      <UsersRequest
+        setUserRequestArray={setUserRequestArray}
+        userRequestArray={userRequestArray}
+      />
 
       <div className="flexGrow"></div>
     </div>

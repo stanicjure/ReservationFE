@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark, faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import "../styles/Admin.css";
 
-const Users = () => {
+const Users = (props) => {
   const [users, setUsers] = useState();
   const [admins, setAdmins] = useState();
   const [temp, setTemp] = useState();
@@ -17,6 +17,8 @@ const Users = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [InfoPop, visible, setVisible, setItem, setInfoTxt] = useInfoPop("");
+
+  const { setUserRequestArray } = props;
 
   const deleteUser = async (username) => {
     if (visible) return;
@@ -81,6 +83,10 @@ const Users = () => {
         const regularUsers = response.data.filter(
           (user) => !user?.roles?.Admin && user?.roles?.User
         );
+        const userRequests = response.data.filter(
+          (user) => user.roles.UserRequest
+        );
+        setUserRequestArray([...userRequests]);
         const adminNames = adminUsers.map((admin) => admin.username);
         const regularNames = regularUsers.map((regular) => regular.username);
         //const userRoles = response.data.map((user) => user.roles);
