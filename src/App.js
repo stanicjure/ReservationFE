@@ -12,6 +12,7 @@ import Admin from "./components/Admin";
 import Lounge from "./components/Lounge";
 import Missing from "./components/Missing";
 import Stats from "./components/Stats";
+import ApprovalPage from "./components/ApprovalPage";
 import Layout from "./components/Layout";
 import RequireAuth from "./components/RequireAuth";
 import PersistLogin from "./components/PersistLogin";
@@ -29,20 +30,23 @@ function App() {
 
         {/* Protected Routes */}
         <Route element={<PersistLogin />}>
-          <Route element={<RequireAuth allowedRoles={[2001]} />}>
+          <Route element={<RequireAuth allowedRoles={[2001, 5050]} />}>
             <Route path="/" element={<Home />} />
           </Route>
-          <Route element={<RequireAuth allowedRoles={[1984]} />}>
+          <Route element={<RequireAuth allowedRoles={[2001, 5050]} />}>
             <Route path="editor" element={<Editor />} />
           </Route>
           <Route element={<RequireAuth allowedRoles={[5050]} />}>
             <Route path="admin" element={<Admin />} />
           </Route>
-          <Route element={<RequireAuth allowedRoles={[1984, 5050]} />}>
+          <Route element={<RequireAuth allowedRoles={[2001, 5050]} />}>
             <Route path="lounge" element={<Lounge />} />
           </Route>
-          <Route element={<RequireAuth allowedRoles={[1984, 5050]} />}>
+          <Route element={<RequireAuth allowedRoles={[2001, 5050]} />}>
             <Route path="stats" element={<Stats />} />
+          </Route>
+          <Route element={<RequireAuth allowedRoles={[1984]} />}>
+            <Route path="approval" element={<ApprovalPage />} />
           </Route>
         </Route>
 

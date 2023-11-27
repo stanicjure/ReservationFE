@@ -45,12 +45,16 @@ const Login = () => {
       console.log(JSON.stringify(response?.data));
 
       const accessToken = response?.data?.accessToken;
-      const roles = response?.data?.roles;
+      const roles = Array.from(response?.data?.roles);
+      const userRequest = roles.filter((r) => r === 1984);
 
       setAuth({ user, accessToken, roles });
       resetUser(); //setUser("");
       setPwd("");
-      navigate(from, { replace: true });
+
+      if (roles.length === 1 && userRequest) {
+        navigate("/approval", { replace: true });
+      } else navigate(from, { replace: true });
     } catch (err) {
       if (!err?.response) {
         setErrMsg("No Server Response");

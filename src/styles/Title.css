@@ -1,0 +1,18 @@
+#titleContainer {
+  position: relative;
+  background-color: rgb(0, 69, 133);
+  height: 12vh;
+  display: flex;
+  align-items: center;
+}
+#titleContainer h1 {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+  font-weight: 500;
+}
+#userName {
+  position: absolute;
+  right: 20px;
+  font-size: 1.2rem;
+}

@@ -7,7 +7,7 @@ const UsersRequest = (props) => {
   const axiosPrivate = useAxiosPrivate();
 
   const handleAccept = async (id) => {
-    const response = await axiosPrivate.patch(`/users/${id}`);
+    const response = await axiosPrivate.patch(`/users/approve/${id}`);
     if (response.status === 200) {
       console.log(response);
     } else {
